@@ -33,7 +33,7 @@ SLIP required fields:
 SLIP other fields
 	current_boat: id string
 	arrival_date: date string
-	departure_history:[{
+	departure_history: [{
 		departure_date: date string
 		departed_boat: id string
 		}]
@@ -42,25 +42,26 @@ SLIP other fields
 Operations on Boats and Ships
 POST
 	
-	url: /boat
-	Add Boat
-		generate_id
-		starts: at_sea
+			url: /boat
+			Add Boat
+				generate_id
+				starts: at_sea
 	
-	url: /slip
-	Add Slip
-		generate_id
-		starts: empty
+			url: /slip
+			Add Slip
+				generate_id
+				starts: empty
 DELETE
 	
-	url: /boat/{{id}}
+			url: /boat/{{id}}
 	Delete Boat
-		remove_id? or set as deleted
+				remove_id? or set as deleted
 		empty slip
 	
-	url: /slip/{{id}}
+		url: /slip/{{id}}
 	Delete Slip
 		Boat in slip moves to at_sea
+
 PATCH
 	url: /boat/{{id}}
 	url: /slip/{{id}}
@@ -71,23 +72,26 @@ PATCH
 
 GET
 	View Boat
-		url: /boat/{{id}}
+	url: /boat/{{id}}
 		View single boat = use id
-		url: /boats/
+	url: /boats/
 		View list of boats
 	
-	url: /slip/{{id}}
-	View Slip using URL
+	url: /slip/{{slip_id}}/
+		View Slip using URL
+	
+	url: /slip/{{slip_id}}/{{boat_id}}
 		View boat currently in slip
 
-PUT
-	url: /boat/{{id}}
+DELETE
+	url: /slip/{{slip_id}}/{{boat_id}}
 	Setting boat to be "At Sea"
 		Causes slip to be empty
 		Boat departure added to slip history
 		Setting ship to at_sea and updating slip status happens in single API call
-	
-	url: /boat/{{id}}/
+
+PUT	
+	url: /slip/{{slip_id}}/{{boat_id}}
 	Managing Boat Arrival
 		Ship arrives and assigned a slip
 		If slip occupies server should return 403 forbidden message
