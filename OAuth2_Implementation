@@ -1,0 +1,17 @@
+Deliverables:
+--A page that has a link a user clicks to visit the Google OAuth 2.0 endpoint
+--A page that handles the user getting redirect back to your website from Google's endpoint and handles exchanging of the access code for a token
+--A page (which could use the same handler as the page they were redirected to, which uses that token to access and display the following info
+	-- Users first name
+	-- Users last name
+	-- URL to access their Google Plus Account
+	-- Print out value of the state variable that was used to secure the original redirect
+
+--Only scope allowed to request is email
+	--additional permissions beyond email and assignment will not be graded
+
+--implement a randomly generated state variable and display it along with the users name
+
+
+STEPS TO OAUTH2
+Get postman going
