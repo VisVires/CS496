@@ -19,9 +19,7 @@ class OAuthHandler(webapp2.RequestHandler):
 	def get(self):
 		logging.debug('The contents of the GET request are: '+ repr(self.request.GET))
 		access_code = self.request.GET['code']
-		state = self.request.GET['state']
-		#
-		#make post request using access code
+		returned_state = self.request.GET['state']
 		post_params = {'code':access_code, 'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'redirect_uri':REDIRECT_URI, 'grant_type':'authorization_code'}
 		head = {'Content-Type': 'application/x-www-form-urlencoded'}
 		encode_post = urllib.urlencode(post_params)
@@ -40,7 +38,7 @@ class OAuthHandler(webapp2.RequestHandler):
 		url = json_contents['url']
 		#
 		#output results
-		template_values = {'firstName': firstName, 'lastName': lastName, 'url': url, 'state': state}
+		template_values = {'firstName': firstName, 'lastName': lastName, 'url': url, 'state': returned_state}
 		self.response.out.write(template.render('display.html',template_values))
 
 
@@ -51,7 +49,7 @@ class MainPage(webapp2.RequestHandler):
 class LogInHandler(webapp2.RequestHandler):
 	def get(self):
 		def gen_url():
-			state = str(uuid.uuid4())
+			state = getState()
 			getParams = { 'response_type':'code', 'state':state, 'scope':'email', 'redirect_uri':REDIRECT_URI, 'client_id':CLIENT_ID}
 			ordered_params = []
 			ordered_params.append('response_type')
@@ -68,6 +66,9 @@ class LogInHandler(webapp2.RequestHandler):
 		content = urllib2.urlopen(url).read()
 		self.response.write(content)
 
+def getState():
+	state = str(uuid.uuid4())
+	return state
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
