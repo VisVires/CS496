@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android UI</string>
+    <string name="main_link_1">Horizontal Linear View</string>
+    <string name="main_link_2">Vertical Linear View</string>
+    <string name="main_link_3">Grid View</string>
+    <string name="main_link_4">Relative Layout View</string>
 </resources>
