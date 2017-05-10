@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:hint="words" />
     <Button
+        android:id="@+id/btnClose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="words" />
+        android:text="@string/close" />
 </LinearLayout>

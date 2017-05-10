@@ -23,9 +23,10 @@
         android:layout_below="@id/name"
         android:layout_alignParentRight="true" />
     <Button
+        android:id="@+id/btnClose"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/times"
         android:layout_alignParentRight="true"
-        android:text="great stufff doood" />
+        android:text="@string/close" />
 </RelativeLayout>
