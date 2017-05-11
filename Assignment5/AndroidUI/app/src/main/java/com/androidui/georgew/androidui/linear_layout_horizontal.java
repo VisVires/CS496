@@ -17,7 +17,7 @@ public class linear_layout_horizontal extends AppCompatActivity {
         btnClose.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                //Closing SecondScreen Activity
+                //Closing linear_layout_horizontal Activity
                 finish();
             }
         });

@@ -6,20 +6,27 @@
     android:paddingRight="16dp"
     android:orientation="vertical" >
     <EditText
+        android:id="@+id/addField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="words" />
-    <EditText
+        android:textSize="20dp"
+        android:hint="@string/add_word_vertical_1"/>
+    <TextView
+        android:id="@+id/addText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="words" />
-    <EditText
+        android:textSize="20dp"
+        android:text="@string/add_word_first_1" />
+    <Button
+        android:id="@+id/btnAddWord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="words" />
+        android:textSize="20dp"
+        android:text="@string/add_word_button_1"/>
     <Button
         android:id="@+id/btnClose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:text="@string/close" />
 </LinearLayout>

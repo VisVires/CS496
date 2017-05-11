@@ -17,7 +17,7 @@ public class relative_layout extends AppCompatActivity {
         btnClose.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                //Closing SecondScreen Activity
+                //Closing relative_layout activity
                 finish();
             }
         });

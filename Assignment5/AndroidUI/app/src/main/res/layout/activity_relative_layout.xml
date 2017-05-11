@@ -5,28 +5,28 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/inputs"
+        android:layout_height="50dp"
         android:layout_width="match_parent"
+        android:hint="@string/add_word_vertical_1" />
+    <Button
+        android:id="@+id/btnAddWord"
+        android:layout_below="@id/textview"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:hint="You're swell" />
+        android:text="@string/add_word_button_2"/>
     <Spinner
-        android:id="@+id/dates"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/times" />
-    <Spinner
-        android:id="@id/times"
-        android:layout_width="96dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/name"
-        android:layout_alignParentRight="true" />
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/inputs"
+        android:layout_alignParentLeft="true" />
     <Button
         android:id="@+id/btnClose"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/times"
+        android:layout_toLeftOf="@id/btnAddWord"
+        android:layout_below="@id/textview"
         android:layout_alignParentRight="true"
         android:text="@string/close" />
 </RelativeLayout>
