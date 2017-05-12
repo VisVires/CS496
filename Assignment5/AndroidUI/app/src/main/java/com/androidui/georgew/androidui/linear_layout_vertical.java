@@ -37,16 +37,6 @@ public class linear_layout_vertical extends AppCompatActivity {
 
         final List<String> inputsList = new ArrayList<String>(Arrays.asList(array));
 
-
-        btnClose.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                //Closing relative_layout activity
-                finish();
-            }
-        });
-
-
         btnChangeWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -10,19 +10,19 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:rotation="-90"
-        android:textSize="10dp"
+        android:textSize="15dp"
         android:hint="@string/add_number_horizontal_1"/>
     <TextView
         android:id="@+id/addTextHoriz"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:textSize="20dp"></TextView>
     <Button
-        android:id="@+id/btnAddNumber"
+        android:id="@+id/btnChangeNumber"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="10dp"
-        android:text="@string/add_number_1"/>
+        android:text="@string/change_number_button"/>
     <Button
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
