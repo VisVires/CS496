@@ -18,11 +18,11 @@
         android:textSize="20dp"
         android:text="@string/add_word_first_1" />
     <Button
-        android:id="@+id/btnAddWord"
+        android:id="@+id/btnChangeWord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="@string/add_word_button_1"/>
+        android:text="@string/change_word_button"/>
     <Button
         android:id="@+id/btnClose"
         android:layout_width="match_parent"

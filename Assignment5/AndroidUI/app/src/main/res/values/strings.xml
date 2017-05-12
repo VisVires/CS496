@@ -9,10 +9,14 @@
     <string name="add_number_first_1">1</string>
     <string name="add_word_vertical_1">Write Here</string>
     <string name="add_word_button_1">Add Word to List</string>
+    <string name="change_word_button">Change Word</string>
     <string name="add_word_button_2">Add Word to Drop Down</string>
     <string name="add_word_first_1">First Word</string>
     <string name="close">CLOSE</string>
     <string-array name="spinner_array">
         <item>None</item>
+    </string-array>
+    <string-array name="linear_array">
+        <item>First</item>
     </string-array>
 </resources>

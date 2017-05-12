@@ -46,10 +46,10 @@ public class relative_layout extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String result = edit.getText().toString();
-                inputsList.add(inputsList.size(),result);
+                inputsList.add(inputsList.size(), result);
                 adapter.notifyDataSetChanged();
 
-                String addedItemText = inputsList.get(inputsList.size()-1);
+                String addedItemText = inputsList.get(inputsList.size() - 1);
 
                 // Confirm the addition
                 Toast.makeText(getApplicationContext(),
@@ -57,4 +57,5 @@ public class relative_layout extends AppCompatActivity {
             }
         });
     }
+}
 
