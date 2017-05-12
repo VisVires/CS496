@@ -25,6 +25,15 @@ public class grid_layout extends AppCompatActivity {
 
         GridView gridView;
         Button btnAddNumber = (Button) findViewById(R.id.add_number_grid);
+        Button btnClose = (Button) findViewById(R.id.btnClose);
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                //Closing linear_layout_horizontal Activity
+                finish();
+            }
+        });
 
         final Integer[] numbers = new Integer[]{
                 1,2,3,4,5,6,7

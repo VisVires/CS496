@@ -12,4 +12,7 @@
     <string name="add_word_button_2">Add Word to Drop Down</string>
     <string name="add_word_first_1">First Word</string>
     <string name="close">CLOSE</string>
+    <string-array name="spinner_array">
+        <item>None</item>
+    </string-array>
 </resources>
