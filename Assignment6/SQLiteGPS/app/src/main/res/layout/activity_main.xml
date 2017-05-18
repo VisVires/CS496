@@ -6,24 +6,28 @@
     android:orientation="vertical"
     tools:context="com.androidui.georgew.sqlitegps.MainActivity">
     <TextView
+        android:id="@+id/lat_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/latitude"
         android:textAlignment="center"
         android:textSize="25dp"/>
     <TextView
+        android:id="@+id/lat_coordinate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="0"
         android:textAlignment="center"
         android:textSize="25dp"/>
     <TextView
+        android:id="@+id/long_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/longitude"
         android:textAlignment="center"
         android:textSize="25dp"/>
     <TextView
+        android:id="@+id/long_coordinate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="0"
