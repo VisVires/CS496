@@ -2,5 +2,7 @@
     <string name="app_name">SQLiteGPS</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
-    <string name="getcoord">Get Current Coordinates</string>
+    <string name="word">Word</string>
+    <string name="inputText">Write Here</string>
+    <string name="getInput">Save Input</string>
 </resources>
