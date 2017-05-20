@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements
         mySQLDB = sqLiteDB.getWritableDatabase();
 
         getWord = (Button) findViewById(R.id.getWord);
-        getWord.setOnClickListener(new View.OnClickListener(){
+        /*getWord.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 if(mySQLDB != null){
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        populateTable();
+        populateTable();*/
     }
 
     private void populateTable(){
@@ -112,9 +113,20 @@ public class MainActivity extends AppCompatActivity implements
                         sqlCursorAdaptor.getCursor().close();
                     }
                 }
-                //sqlCursor = mySQLDB.query(DBContract.myTable.TABLE_NAME,
-                  //      new String[]{DBContract.myTable._ID, DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_WORD}, null, null, null);
+                sqlCursor = mySQLDB.query(DBContract.myTable.TABLE_NAME,
+                        new String[]{DBContract.myTable._ID,
+                                DBContract.myTable.COLUMN_NAME_LONGITUDE,
+                                DBContract.myTable.COLUMN_NAME_LATITUDE,
+                                DBContract.myTable.COLUMN_NAME_WORD}, DBContract.myTable.COLUMN_NAME_LATITUDE + " >?", null, null, null, null);
 
+                ListView coordinate_list = (ListView) findViewById(R.id.coordinate_list);
+                sqlCursorAdaptor = new SimpleCursorAdapter(this,
+                        R.layout.coordinate_list,
+                        sqlCursor,
+                        new String[]{DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_WORD},
+                        new int[]{R.id.longitude_list, R.id.latitude_list, R.id.word_list},
+                        0);
+                coordinate_list.setAdapter(sqlCursorAdaptor);
             } catch (Exception e) {
                 Log.d(TAG, "Unable to load data from database");
             }
@@ -182,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 }
 
+
 class SQLiteDB extends SQLiteOpenHelper{
 
     public SQLiteDB(Context context){
@@ -218,9 +231,9 @@ final class DBContract{
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE " +
                 myTable.TABLE_NAME + "(" + myTable._ID + " INTEGER PRIMARY KEY NOT NULL," +
-                myTable.COLUMN_NAME_LONGITUDE + "DOUBLE," +
-                myTable.COLUMN_NAME_LATITUDE + "DOUBLE," +
-                myTable.COLUMN_NAME_WORD + "VARCHAR(255))";
+                myTable.COLUMN_NAME_LONGITUDE + " VARCHAR(255)," +
+                myTable.COLUMN_NAME_LATITUDE + " VARCHAR(255)," +
+                myTable.COLUMN_NAME_WORD + " VARCHAR(255))";
 
         public static final String SQL_TEST_TABLE_INSERT = "INSERT INTO " + TABLE_NAME + " (" +
                 COLUMN_NAME_LONGITUDE + ", " + COLUMN_NAME_LATITUDE + ", " + COLUMN_NAME_WORD + ") VALUES (-145, 60, 'test');";
