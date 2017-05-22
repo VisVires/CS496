@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -131,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements
         populateTable();
     }
 
-<<<<<<< HEAD
     private void makeToast(String toastText){
         //notify user
         Context context = getApplicationContext();
@@ -139,9 +139,6 @@ public class MainActivity extends AppCompatActivity implements
         CharSequence text =  toastText + " Added";
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
-=======
-        populateTable();
->>>>>>> parent of 5f4f4fa... completed final function
     }
 
     //load data from the database
@@ -154,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements
                         sqlCursorAdaptor.getCursor().close();
                     }
                 }
-<<<<<<< HEAD
                 //create fields to add to table
                 String[] columns = new String[]{DBContract.myTable._ID,
                         DBContract.myTable.COLUMN_NAME_WORD,
@@ -175,11 +171,6 @@ public class MainActivity extends AppCompatActivity implements
                         0);
                 //set coordinate list to sql cursor
                 coordinate_list.setAdapter(sqlCursorAdaptor);
-=======
-                //sqlCursor = mySQLDB.query(DBContract.myTable.TABLE_NAME,
-                  //      new String[]{DBContract.myTable._ID, DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_WORD}, null, null, null);
-
->>>>>>> parent of 5f4f4fa... completed final function
             } catch (Exception e) {
                 Log.d(TAG, "Unable to load data from database");
             }
@@ -256,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 }
 
+
 class SQLiteDB extends SQLiteOpenHelper{
 
     public SQLiteDB(Context context){
@@ -290,18 +282,9 @@ final class DBContract{
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE " +
                 myTable.TABLE_NAME + "(" + myTable._ID + " INTEGER PRIMARY KEY NOT NULL," +
-<<<<<<< HEAD
                 myTable.COLUMN_NAME_WORD + " VARCHAR(255)," +
                 myTable.COLUMN_NAME_LONGITUDE + " VARCHAR(255)," +
                 myTable.COLUMN_NAME_LATITUDE + " VARCHAR(255))";
-=======
-                myTable.COLUMN_NAME_LONGITUDE + "DOUBLE," +
-                myTable.COLUMN_NAME_LATITUDE + "DOUBLE," +
-                myTable.COLUMN_NAME_WORD + "VARCHAR(255))";
-
-        public static final String SQL_TEST_TABLE_INSERT = "INSERT INTO " + TABLE_NAME + " (" +
-                COLUMN_NAME_LONGITUDE + ", " + COLUMN_NAME_LATITUDE + ", " + COLUMN_NAME_WORD + ") VALUES (-145, 60, 'test');";
->>>>>>> parent of 5f4f4fa... completed final function
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + myTable.TABLE_NAME;
     }
