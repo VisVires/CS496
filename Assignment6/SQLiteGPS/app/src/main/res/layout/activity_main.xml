@@ -13,20 +13,6 @@
         android:textSize="25dp"
         android:hint="@string/inputText"/>
     <TextView
-        android:id="@+id/lat_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/latitude"
-        android:textAlignment="center"
-        android:textSize="25dp"/>
-    <TextView
-        android:id="@+id/lat_coordinate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textAlignment="center"
-        android:textSize="25dp"/>
-    <TextView
         android:id="@+id/long_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +21,20 @@
         android:textSize="25dp"/>
     <TextView
         android:id="@+id/long_coordinate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textAlignment="center"
+        android:textSize="25dp"/>
+    <TextView
+        android:id="@+id/lat_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/latitude"
+        android:textAlignment="center"
+        android:textSize="25dp"/>
+    <TextView
+        android:id="@+id/lat_coordinate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="0"
@@ -64,14 +64,14 @@
             android:layout_weight="1"
             android:textSize="25dp"
             android:textAlignment="center"
-            android:text="@string/latitude"/>
+            android:text="@string/longitude"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="25dp"
             android:textAlignment="center"
-            android:text="@string/longitude"/>
+            android:text="@string/latitude"/>
     </LinearLayout>
     <ListView
         android:id="@+id/coordinate_list"

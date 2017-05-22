@@ -4,23 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coord_list_item"
-    android:weightSum="3">
+    android:weightSum="2">
     <TextView
-        android:id="@+id/latitude_list"
+        android:id="@+id/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="side one"/>
+        android:textAlignment="center"/>
     <TextView
-        android:id="@+id/longitude_list"
+        android:id="@+id/longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="side two"/>
+<<<<<<< HEAD
+        android:textAlignment="center"/>
     <TextView
         android:id="@+id/word_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="side three"/>
+        android:textAlignment="center"/>
+=======
+        android:text="side two"/>
+>>>>>>> parent of 5f4f4fa... completed final function
 </LinearLayout>

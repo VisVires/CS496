@@ -22,8 +22,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -32,6 +32,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tagmanager.TagManagerApiImpl;
+
+import static android.R.id.input;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements
     private LocationListener locationListener;
     private LocationRequest locationRequest;
     private TextView latitude;
+    double default_longitude = -123.2;
+    double default_latitude = 44.5;
     private TextView longitude;
     private static final int LOCATION_PERMISSION_RESULT = 17;
 
@@ -63,14 +67,15 @@ public class MainActivity extends AppCompatActivity implements
                     .addApi(LocationServices.API)
                     .build();
         }
-
+        //set up textviews
         latitude = (TextView) findViewById(R.id.lat_coordinate);
         longitude = (TextView) findViewById(R.id.long_coordinate);
-        latitude.setText("Activity Created");
+        //set location request settings
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(5000);
+        //set location listener
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -80,63 +85,110 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     longitude.setText("No Location Avaliable");
                 }
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                CharSequence text = "Location Changed";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         };
-
+        //activate instance of sqlite db
         sqLiteDB = new SQLiteDB(this);
+        //make writeable
         mySQLDB = sqLiteDB.getWritableDatabase();
 
+        //set up button for user inputs/update sqlite db
         getWord = (Button) findViewById(R.id.getWord);
-        /*getWord.setOnClickListener(new View.OnClickListener(){
+        getWord.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 if(mySQLDB != null){
+                    //add current values to db if db exists
                     ContentValues vals = new ContentValues();
-                    vals.put(DBContract.myTable.COLUMN_NAME_LONGITUDE, String.valueOf(myLocation.getLongitude()));
-                    vals.put(DBContract.myTable.COLUMN_NAME_LATITUDE, String.valueOf(myLocation.getLatitude()));
-                    vals.put(DBContract.myTable.COLUMN_NAME_WORD, ((EditText)findViewById(R.id.input_word)).getText().toString());
+                    EditText curInput = (EditText)findViewById(R.id.input_word);
+                    String userInput;
+                    //check for input in input field
+                    if(curInput.getText().toString() != null){
+                        userInput = curInput.getText().toString();
+                    } else {
+                        userInput = "None";
+                    }
+                    //fill out db row
+                    vals.put(DBContract.myTable.COLUMN_NAME_WORD, userInput);
+                    vals.put(DBContract.myTable.COLUMN_NAME_LONGITUDE, longitude.getText().toString());
+                    vals.put(DBContract.myTable.COLUMN_NAME_LATITUDE, latitude.getText().toString());
                     mySQLDB.insert(DBContract.myTable.TABLE_NAME, null, vals);
+                    makeToast(userInput);
                 } else {
                     Log.d(TAG, "Unable to access DB for writing");
                 }
+
+                //repopulate table
+                populateTable();
             }
         });
-
-        populateTable();*/
+        //populate table on load
+        populateTable();
     }
 
+<<<<<<< HEAD
+    private void makeToast(String toastText){
+        //notify user
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        CharSequence text =  toastText + " Added";
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+=======
+        populateTable();
+>>>>>>> parent of 5f4f4fa... completed final function
+    }
+
+    //load data from the database
     private void populateTable(){
         if (mySQLDB != null){
             try {
+                //close cursor adaptor if it exists and is open
                 if(sqlCursorAdaptor != null && sqlCursorAdaptor.getCursor() != null){
                     if(!sqlCursorAdaptor.getCursor().isClosed()){
                         sqlCursorAdaptor.getCursor().close();
                     }
                 }
+<<<<<<< HEAD
+                //create fields to add to table
+                String[] columns = new String[]{DBContract.myTable._ID,
+                        DBContract.myTable.COLUMN_NAME_WORD,
+                        DBContract.myTable.COLUMN_NAME_LONGITUDE,
+                        DBContract.myTable.COLUMN_NAME_LATITUDE};
+                //set up query
                 sqlCursor = mySQLDB.query(DBContract.myTable.TABLE_NAME,
-                        new String[]{DBContract.myTable._ID,
-                                DBContract.myTable.COLUMN_NAME_LONGITUDE,
-                                DBContract.myTable.COLUMN_NAME_LATITUDE,
-                                DBContract.myTable.COLUMN_NAME_WORD}, DBContract.myTable.COLUMN_NAME_LATITUDE + " >?", null, null, null, null);
-
+                        columns, null, null, null, null, null);
+                //create list
                 ListView coordinate_list = (ListView) findViewById(R.id.coordinate_list);
+                //set up fields for input into list view adaptor
+                String [] fields = new String[]{DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_WORD};
                 sqlCursorAdaptor = new SimpleCursorAdapter(this,
                         R.layout.coordinate_list,
                         sqlCursor,
-                        new String[]{DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_WORD},
-                        new int[]{R.id.longitude_list, R.id.latitude_list, R.id.word_list},
+                        fields,
+                        new int[]{R.id.word_list, R.id.longitude_list, R.id.latitude_list},
                         0);
+                //set coordinate list to sql cursor
                 coordinate_list.setAdapter(sqlCursorAdaptor);
+=======
+                //sqlCursor = mySQLDB.query(DBContract.myTable.TABLE_NAME,
+                  //      new String[]{DBContract.myTable._ID, DBContract.myTable.COLUMN_NAME_LONGITUDE, DBContract.myTable.COLUMN_NAME_LATITUDE, DBContract.myTable.COLUMN_NAME_WORD}, null, null, null);
+
+>>>>>>> parent of 5f4f4fa... completed final function
             } catch (Exception e) {
                 Log.d(TAG, "Unable to load data from database");
             }
         }
     }
-
+    //connect to API
     @Override
     protected void onStart() {
         googleApiClient.connect();
-        latitude.setText("Started Activity");
         super.onStart();
     }
 
@@ -146,14 +198,17 @@ public class MainActivity extends AppCompatActivity implements
         super.onStop();
     }
 
+    //check for permissions, if granted then update location
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        latitude.setText("onConnect");
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_RESULT);
-            longitude.setText("NO PERMISSIONS");
+            longitude.setText("-123.2");
+            latitude.setText("44.5");
+            //myLocation.setLongitude(default_longitude);
+            //myLocation.setLatitude(default_latitude);
             return;
         }
         updateLocation();
@@ -164,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    //return error if connection is failed
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Dialog errorDialog = GoogleApiAvailability.getInstance().getErrorDialog(this, connectionResult.getErrorCode(), 0);
@@ -180,20 +236,25 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateLocation() {
+        //if permission is not granted return
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            longitude.setText("-123.2");
+            latitude.setText("44.5");
             return;
         }
-        myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        //get last location from google api
+        //myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
+        //if location is valid set text fields of ui to longitude and latitude
         if (myLocation != null) {
             longitude.setText(String.valueOf(myLocation.getLongitude()));
             latitude.setText(String.valueOf(myLocation.getLatitude()));
         } else {
+            //use location services to find location
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, locationListener);
         }
     }
 }
-
 
 class SQLiteDB extends SQLiteOpenHelper{
 
@@ -201,15 +262,12 @@ class SQLiteDB extends SQLiteOpenHelper{
         super(context, DBContract.myTable.DB_NAME, null, DBContract.myTable.DB_VERSION);
     }
 
+    //create table
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL(DBContract.myTable.SQL_CREATE_TABLE);
-        ContentValues testers = new ContentValues();
-        testers.put(DBContract.myTable.COLUMN_NAME_LONGITUDE, -125);
-        testers.put(DBContract.myTable.COLUMN_NAME_LATITUDE, 60);
-        testers.put(DBContract.myTable.COLUMN_NAME_WORD, "fishyWord");
-        db.insert(DBContract.myTable.TABLE_NAME, null, testers);
     }
+    //drop old table and update with new version
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL(DBContract.myTable.SQL_DROP_TABLE);
@@ -218,6 +276,7 @@ class SQLiteDB extends SQLiteOpenHelper{
 
 }
 
+//class to make inserts, queries easier to manage
 final class DBContract{
     private DBContract(){};
 
@@ -227,16 +286,22 @@ final class DBContract{
         public static final String COLUMN_NAME_LONGITUDE = "Longitude";
         public static final String COLUMN_NAME_LATITUDE = "Latitude";
         public static final String COLUMN_NAME_WORD = "Word";
-        public static final int DB_VERSION = 1;
+        public static final int DB_VERSION = 11;
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE " +
                 myTable.TABLE_NAME + "(" + myTable._ID + " INTEGER PRIMARY KEY NOT NULL," +
+<<<<<<< HEAD
+                myTable.COLUMN_NAME_WORD + " VARCHAR(255)," +
                 myTable.COLUMN_NAME_LONGITUDE + " VARCHAR(255)," +
-                myTable.COLUMN_NAME_LATITUDE + " VARCHAR(255)," +
-                myTable.COLUMN_NAME_WORD + " VARCHAR(255))";
+                myTable.COLUMN_NAME_LATITUDE + " VARCHAR(255))";
+=======
+                myTable.COLUMN_NAME_LONGITUDE + "DOUBLE," +
+                myTable.COLUMN_NAME_LATITUDE + "DOUBLE," +
+                myTable.COLUMN_NAME_WORD + "VARCHAR(255))";
 
         public static final String SQL_TEST_TABLE_INSERT = "INSERT INTO " + TABLE_NAME + " (" +
                 COLUMN_NAME_LONGITUDE + ", " + COLUMN_NAME_LATITUDE + ", " + COLUMN_NAME_WORD + ") VALUES (-145, 60, 'test');";
+>>>>>>> parent of 5f4f4fa... completed final function
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + myTable.TABLE_NAME;
     }
