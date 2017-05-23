@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OAuthApp</string>
+    <string name="title_activity_auth_complete">AuthComplete</string>
+</resources>
