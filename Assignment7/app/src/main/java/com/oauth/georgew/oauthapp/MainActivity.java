@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import net.openid.appauth.AuthState;
@@ -24,11 +25,14 @@ public class MainActivity extends AppCompatActivity {
     private AuthorizationService completeAuthorizationService;
     private AuthState authState;
     TextView access_token;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences authPreference = getSharedPreferences("auth", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
+        completeAuthorizationService = new AuthorizationService(this);
         /*authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction() {
             @Override
             public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException e) {
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (authorization != null && authorization.getAccessToken() != null){
+            access_token = (TextView) findViewById(R.id.access_token);
+            access_token.setText(authorization.getAccessToken());
             return authorization;
         } else {
             createAuthState();
@@ -69,11 +75,17 @@ public class MainActivity extends AppCompatActivity {
         Uri redirect = new Uri.Builder().scheme("com.oauth.georgew.oauthapp").path("path").build();
 
         AuthorizationServiceConfiguration config = new AuthorizationServiceConfiguration(authEndPoint, tokenEndPoint, null);
-        AuthorizationRequest req = new AuthorizationRequest.Builder(config, CLIENT_ID, ResponseTypeValues.CODE, redirect).setScopes(
-                "https://www.googleapis.com/auth/plus.me", "https://www.googleapis.com/auth/plus.stream.write", "https://www.googleapis.com/auth/plus.stream.read"
-        ).build();
+        AuthorizationRequest req = new AuthorizationRequest.Builder(config, "327991664103-3ij54mg8q56qeclp6a1i4jjn7jtfk8uj.apps.googleusercontent.com", ResponseTypeValues.CODE, redirect)
+                .setScopes("https://www.googleapis.com/auth/plus.me", "https://www.googleapis.com/auth/plus.stream.write", "https://www.googleapis.com/auth/plus.stream.read").build();
 
         Intent authComplete = new Intent(this, AuthComplete.class);
-        completeAuthorizationService.performAuthorizationRequest(req, PendingIntent.getActivity(this, req.hashCode(), authComplete, 0));
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, req.hashCode(), authComplete, 0);
+        if (req != null && pendingIntent != null){
+            Log.d(TAG, "This should work right?");
+            completeAuthorizationService.performAuthorizationRequest(req, pendingIntent);
+        } else {
+            Log.d(TAG, "Doesn't work");
+        }
     }
 }

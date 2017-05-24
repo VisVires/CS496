@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import net.openid.appauth.AuthState;
@@ -18,11 +19,14 @@ import net.openid.appauth.TokenResponse;
 
 public class AuthComplete extends AppCompatActivity {
 
+    private static final String TAG = AuthComplete.class.getSimpleName();
     private AuthorizationService completeAuthorizationService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_complete);
+        Log.d(TAG, "Got this far yo");
 
         completeAuthorizationService = new AuthorizationService(this);
         Uri redirectUri = getIntent().getData();
@@ -40,7 +44,7 @@ public class AuthComplete extends AppCompatActivity {
                             authorizationPreferences.edit().putString("stateJson", authState.jsonSerializeString()).apply();
                             finish();
                         }
-            });
+                    });
         }
     }
 }
