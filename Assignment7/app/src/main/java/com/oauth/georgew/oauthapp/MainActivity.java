@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,70 +64,10 @@ public class MainActivity extends AppCompatActivity {
         getPosts.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                try {
-                    authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction() {
-                        @Override
-                        public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException) {
-                            if(authorizationException == null){
-                                client = new OkHttpClient();
-                                HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
-                                url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
-                                Request request = new Request.Builder()
-                                        .url(url)
-                                        .addHeader("Authorization", "Bearer " + accessToken)
-                                        .build();
-                                client.newCall(request).enqueue(new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
-                                        Log.d(TAG, "FAILURE REQUEST");
-                                        e.printStackTrace();
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        String resp = response.body().string();
-                                        try{
-                                            Log.d(TAG, response.toString());
-                                            JSONObject jsonObject = new JSONObject(resp);
-                                            JSONArray items = jsonObject.getJSONArray("items");
-                                            List<Map<String,String>> posts = new ArrayList<Map<String,String>>();
-                                            //final String title = items.getJSONObject(0).getString("title");
-                                            for(int i = 0; i < items.length(); i++){
-                                                HashMap<String, String> m = new HashMap<String, String>();
-                                                m.put("published", items.getJSONObject(i).getString("published"));
-                                                m.put("title",items.getJSONObject(i).getString("title"));
-                                                posts.add(m);
-                                            }
-                                            final SimpleAdapter postAdapter = new SimpleAdapter(
-                                                    MainActivity.this,
-                                                    posts,
-                                                    R.layout.post_item,
-                                                    new String[]{"published", "title"},
-                                                    new int[]{R.id.item_one, R.id.item_two});
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    ((ListView) findViewById(R.id.post_list)).setAdapter(postAdapter);
-                                                }
-                                            });
-
-                                        } catch (JSONException e1){
-                                            Log.d(TAG, response.toString());
-                                            Log.d(TAG, "FAILURE RESPONSE");
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-                                });
-                            }
-                        }
-                    });
-
-                } catch(Exception e){
-                    e.printStackTrace();
-                }
+                makeGetRequestAndResponse();
              }
         });
+
 
         Button post_to_goog = (Button) findViewById(R.id.post_to_google);
         post_to_goog.setOnClickListener(new View.OnClickListener(){
@@ -134,31 +75,96 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText input_text = (EditText) findViewById(R.id.goog_input);
                 final String user_input = input_text.getText().toString();
-                final TextView debug_text = (TextView) findViewById(R.id.debug_text);
-                try{
-                    authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction(){
-                        @Override
-                        public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException){
-                            if(authorizationException == null){
-                                OkHttpClient client = new OkHttpClient();
-                                debug_text.setText(user_input);
-                                /*String post(String url, String json) throws IOException {
-                                    RequestBody body = RequestBody.create(JSON, json);
-                                    Request request = new Request.Builder()
-                                            .url(url)
-                                            .post(body)
-                                            .build();
-                                }*/
-                            }
-                        }
-                    });
-                } catch (Exception pe){
-                    pe.printStackTrace();
-                }
+                createNewPost(user_input);
             }
         });
     }
 
+
+    public void createNewPost(final String user_input){
+
+        final TextView debug_text = (TextView) findViewById(R.id.debug_text);
+
+        try{
+            authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction(){
+                @Override
+                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException){
+                    if(authorizationException == null) {
+                        OkHttpClient client = new OkHttpClient();
+                        debug_text.setText(user_input);
+                    }
+                }
+            });
+        } catch (Exception pe){
+            pe.printStackTrace();
+        }
+    }
+
+
+    public void makeGetRequestAndResponse(){
+        try {
+            authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction() {
+                @Override
+                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException) {
+                    if(authorizationException == null){
+                        client = new OkHttpClient();
+                        HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
+                        url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .addHeader("Authorization", "Bearer " + accessToken)
+                                .build();
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.d(TAG, "FAILURE REQUEST");
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String resp = response.body().string();
+                                try{
+                                    Log.d(TAG, response.toString());
+                                    JSONObject jsonObject = new JSONObject(resp);
+                                    JSONArray items = jsonObject.getJSONArray("items");
+                                    List<Map<String,String>> posts = new ArrayList<Map<String,String>>();
+                                    //final String title = items.getJSONObject(0).getString("title");
+                                    for(int i = 0; i < items.length(); i++){
+                                        HashMap<String, String> m = new HashMap<String, String>();
+                                        m.put("published", items.getJSONObject(i).getString("published"));
+                                        m.put("title",items.getJSONObject(i).getString("title"));
+                                        posts.add(m);
+                                    }
+                                    final SimpleAdapter postAdapter = new SimpleAdapter(
+                                            MainActivity.this,
+                                            posts,
+                                            R.layout.post_item,
+                                            new String[]{"published", "title"},
+                                            new int[]{R.id.item_one, R.id.item_two});
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ((ListView) findViewById(R.id.post_list)).setAdapter(postAdapter);
+                                        }
+                                    });
+
+                                } catch (JSONException e1){
+                                    Log.d(TAG, response.toString());
+                                    Log.d(TAG, "FAILURE RESPONSE");
+                                    e1.printStackTrace();
+                                }
+
+                            }
+                        });
+                    }
+                }
+            });
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onStart(){
