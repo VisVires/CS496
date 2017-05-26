@@ -1,6 +1,7 @@
 package com.oauth.georgew.oauthapp;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -28,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
     TextView access_token;
     private OkHttpClient client;
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void createNewPost(final String user_input){
+    public void createNewPost(final String user_input) {
 
         final TextView debug_text = (TextView) findViewById(R.id.debug_text);
 
@@ -92,6 +93,22 @@ public class MainActivity extends AppCompatActivity {
                     if(authorizationException == null) {
                         OkHttpClient client = new OkHttpClient();
                         debug_text.setText(user_input);
+                        String json = "{ 'object': { 'originalContent': '" +  user_input + "' }, 'access': { 'items':  [ { 'type': 'domain' } ], 'domainRestricted': true } }";
+                        HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
+                        url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
+                        final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                        RequestBody body = RequestBody.create(mediaType, json);
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .post(body)
+                                .addHeader("Authorization", "Bearer " + accessToken)
+                                .build();
+                        try {
+                            Response response = client.newCall(request).execute();
+                            String resp = response.body().string();
+                        } catch(IOException ie){
+                            ie.printStackTrace();
+                        }
                     }
                 }
             });
