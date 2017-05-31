@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         completeAuthorizationService = new AuthorizationService(this);
 
         Button getPosts = (Button)findViewById(R.id.get_posts);
+        //make get request
         getPosts.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button post_to_goog = (Button) findViewById(R.id.post_to_google);
+        //make post request
         post_to_goog.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -91,10 +93,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException){
                     if(authorizationException == null) {
-                        OkHttpClient client = new OkHttpClient();
-                        debug_text.setText(user_input);
+                        client = new OkHttpClient();
+                        Log.d(TAG, accessToken);
+                        //debug_text.setText(user_input);
                         String json = "{ 'object': { 'originalContent': '" +  user_input + "' }, 'access': { 'items':  [ { 'type': 'domain' } ], 'domainRestricted': true } }";
-                        HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
+                        HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities");
                         url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
                         final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
                         RequestBody body = RequestBody.create(mediaType, json);
@@ -103,12 +106,18 @@ public class MainActivity extends AppCompatActivity {
                                 .post(body)
                                 .addHeader("Authorization", "Bearer " + accessToken)
                                 .build();
-                        try {
-                            Response response = client.newCall(request).execute();
-                            String resp = response.body().string();
-                        } catch(IOException ie){
-                            ie.printStackTrace();
-                        }
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.d(TAG, "FAILURE REQUEST");
+                                e.printStackTrace();
+                            }
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String resp = response.body().string();
+                                Log.d(TAG, response.toString());
+                            }
+                        });
                     }
                 }
             });
@@ -127,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         client = new OkHttpClient();
                         HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
                         url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
+                        url = url.newBuilder().addQueryParameter("maxResults", String.valueOf(3)).build();
                         Request request = new Request.Builder()
                                 .url(url)
                                 .addHeader("Authorization", "Bearer " + accessToken)
@@ -146,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
                                     JSONObject jsonObject = new JSONObject(resp);
                                     JSONArray items = jsonObject.getJSONArray("items");
                                     List<Map<String,String>> posts = new ArrayList<Map<String,String>>();
-                                    //final String title = items.getJSONObject(0).getString("title");
                                     for(int i = 0; i < items.length(); i++){
                                         HashMap<String, String> m = new HashMap<String, String>();
                                         m.put("published", items.getJSONObject(i).getString("published"));
@@ -203,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (authorization != null && authorization.getAccessToken() != null){
             Log.d(TAG, authorization.getAccessToken());
-            //access_token.setText(authorization.getAccessToken());
             return authorization;
         } else {
             createAuthState();
@@ -226,7 +234,4 @@ public class MainActivity extends AppCompatActivity {
         completeAuthorizationService.performAuthorizationRequest(req, pendingIntent);
     }
 
-    void PostToGoog(){
-
-    }
 }
