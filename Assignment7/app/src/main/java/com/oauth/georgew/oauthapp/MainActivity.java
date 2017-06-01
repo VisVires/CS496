@@ -76,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
         post_to_goog.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                //get input text and save to user_input variable
                 EditText input_text = (EditText) findViewById(R.id.goog_input);
                 final String user_input = input_text.getText().toString();
+                //make post request
                 createNewPost(user_input);
             }
         });
@@ -85,27 +87,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createNewPost(final String user_input) {
-
         final TextView debug_text = (TextView) findViewById(R.id.debug_text);
-
         try{
             authState.performActionWithFreshTokens(completeAuthorizationService, new AuthState.AuthStateAction(){
                 @Override
                 public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException){
                     if(authorizationException == null) {
                         client = new OkHttpClient();
-                        Log.d(TAG, accessToken);
                         //debug_text.setText(user_input);
+                        //set json string with user input
                         String json = "{ 'object': { 'originalContent': '" +  user_input + "' }, 'access': { 'items':  [ { 'type': 'domain' } ], 'domainRestricted': true } }";
+                        //build url
                         HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities");
                         url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
                         final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                        //make request with body
                         RequestBody body = RequestBody.create(mediaType, json);
                         Request request = new Request.Builder()
                                 .url(url)
                                 .post(body)
                                 .addHeader("Authorization", "Bearer " + accessToken)
                                 .build();
+                        //complete async request
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -134,20 +137,23 @@ public class MainActivity extends AppCompatActivity {
                 public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException) {
                     if(authorizationException == null){
                         client = new OkHttpClient();
+                        //build url with 3 last posts
                         HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plusDomains/v1/people/me/activities/user");
                         url = url.newBuilder().addQueryParameter("key", "AIzaSyCYCwKDOPKVqhpwLeQP6FS5aqQDU-T2JJI").build();
                         url = url.newBuilder().addQueryParameter("maxResults", String.valueOf(3)).build();
+                        //make get request
                         Request request = new Request.Builder()
                                 .url(url)
                                 .addHeader("Authorization", "Bearer " + accessToken)
                                 .build();
+                        //make async call
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 Log.d(TAG, "FAILURE REQUEST");
                                 e.printStackTrace();
                             }
-
+                            //with response place in list
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 String resp = response.body().string();
@@ -162,12 +168,14 @@ public class MainActivity extends AppCompatActivity {
                                         m.put("title",items.getJSONObject(i).getString("title"));
                                         posts.add(m);
                                     }
+                                    //create simple adapter
                                     final SimpleAdapter postAdapter = new SimpleAdapter(
                                             MainActivity.this,
                                             posts,
                                             R.layout.post_item,
                                             new String[]{"published", "title"},
                                             new int[]{R.id.item_one, R.id.item_two});
+                                    //post list contents using adapter
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -180,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG, "FAILURE RESPONSE");
                                     e1.printStackTrace();
                                 }
-
                             }
                         });
                     }
@@ -191,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
+    //set up the token
     @Override
     protected void onStart(){
         authState = getOrCreateAuthState();
@@ -202,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         AuthState authorization = null;
         SharedPreferences authorizationPreference = getSharedPreferences("auth", MODE_PRIVATE);
         String stateJson = authorizationPreference.getString("stateJson", null);
+        //get stateJson
         if(stateJson != null){
             try {
                 authorization = AuthState.jsonDeserialize(stateJson);
@@ -210,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }
+        //either get current auth state or create an auth state
         if (authorization != null && authorization.getAccessToken() != null){
             Log.d(TAG, authorization.getAccessToken());
             return authorization;
@@ -219,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //get new access token
     void createAuthState(){
         Uri authEndPoint = new Uri.Builder().scheme("https").authority("accounts.google.com").path("o/oauth2/v2/auth").build();
         Uri tokenEndPoint = new Uri.Builder().scheme("https").authority("www.googleapis.com").path("/oauth2/v4/token").build();
