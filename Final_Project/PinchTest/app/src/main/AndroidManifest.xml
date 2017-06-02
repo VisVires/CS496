@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Pinches" />
-        <activity android:name=".Circumference"></activity>
+        <activity android:name=".Circumference" />
+        <activity android:name=".AuthComplete"></activity>
     </application>
 
 </manifest>
