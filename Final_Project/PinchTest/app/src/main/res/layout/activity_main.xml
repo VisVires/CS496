@@ -18,14 +18,14 @@
         android:weightSum="2">
         <TextView
             android:id="@+id/age_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="1"
-            android:text="Age "/>
+            android:text="@string/age"/>
         <TextView
             android:id="@+id/age"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20dp"
@@ -38,14 +38,14 @@
         android:weightSum="2">
         <TextView
             android:id="@+id/height_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="1"
-            android:text="Height"/>
+            android:text="@string/height"/>
         <TextView
             android:id="@+id/height"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
@@ -58,14 +58,14 @@
         android:weightSum="2">
         <TextView
             android:id="@+id/weight_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="1"
-            android:text="Weight"/>
+            android:text="@string/weight"/>
         <TextView
             android:id="@+id/weight"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textAlignment="center"
@@ -78,14 +78,14 @@
         android:weightSum="2">
         <TextView
             android:id="@+id/bmi_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="1"
-            android:text="BMI"/>
+            android:text="@string/bmi"/>
         <TextView
             android:id="@+id/bmi"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textAlignment="center"
@@ -98,14 +98,14 @@
         android:weightSum="2">
         <TextView
             android:id="@+id/body_fat_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20dp"
-            android:text="Body Fat %"/>
+            android:text="@string/bodyfat"/>
         <TextView
             android:id="@+id/body_fat"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textAlignment="center"
@@ -117,11 +117,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="Calculate Body Fat Percentage"/>
+        android:text="@string/bodyfat_button"/>
     <Button
         android:id="@+id/circum_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="Add Circumference Measurements"/>
+        android:text="@string/circum_button"/>
 </LinearLayout>
