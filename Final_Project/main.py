@@ -70,8 +70,8 @@ class Measurement_Handler(webapp2.RequestHandler):
 			if measurement_data.get('calf_circ'):
 				new_measurement.calf_circ = measurement_data['calf_circ']
 			new_measurement.put()
-			new_measurement.id = new_measurement.key.urlsafe()
-			new_measurement.put()
+			#new_measurement.id = new_measurement.key.urlsafe()
+			#new_measurement.put()
 			user.measurements.append(new_measurement)
 			user.put()
 			user_dict = user.to_dict()
@@ -82,7 +82,7 @@ class Measurement_Handler(webapp2.RequestHandler):
 	def get(self, id=None):
 		if id:
 			curr_measurement = ndb.Key(urlsafe=id).get()
-			curr_measurement_dict = curr_measurement.to_dict()
+			curr_measurement_dict = curr_measurement.measurements[0].to_dict()
 			self.response.write(json.dumps(curr_measurement_dict))
 
 
@@ -99,8 +99,8 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			new_pinches.subscapular_pinch = pinch_data['subscapular']
 			new_pinches.suprailiac_pinch = pinch_data['suprailiac']
 			new_pinches.put()
-			new_pinches.id = new_pinches.key.urlsafe()
-			new_pinches.put()
+			#new_pinches.id = new_pinches.key.urlsafe()
+			#new_pinches.put()
 			curr_user.pinches.append(new_pinches)
 			curr_user.put()
 			curr_user_dict = curr_user.to_dict()
@@ -109,7 +109,7 @@ class PinchTest_Handler(webapp2.RequestHandler):
 	def get(self, id=None):
 		if id:
 			curr_pinches = ndb.Key(urlsafe=id).get()
-			curr_pinches_dict = curr_pinches.to_dict()
+			curr_pinches_dict = curr_pinches.pinches[0].to_dict()
 			self.response.write(json.dumps(curr_pinches_dict))
 
 #test class

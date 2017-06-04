@@ -124,4 +124,9 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:text="@string/circum_button"/>
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="testplace"/>
 </LinearLayout>
