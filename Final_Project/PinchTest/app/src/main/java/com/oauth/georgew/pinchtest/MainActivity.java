@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     Button get_started;
     TextView test1;
     String gender, user_id, first_name, last_name, email;
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,46 +72,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void postUserInfoToApi(){
-        try{
-            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction(){
-                @Override
-                public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException authorizationException){
-                    if(authorizationException == null) {
-                        client = new OkHttpClient();
-                        //debug_text.setText(user_input);
-                        //set json string with user input
-                        String json = "{ 'first_name': '" +  first_name + "', 'last_name': '" +  last_name + "', 'email': '" +  email + "', 'user': '" +  user_id + "', 'gender': '" +  gender + "' }";
-                        //build url
-                        Log.d(TAG, json);
-                        HttpUrl url = HttpUrl.parse("https://bodyfatpinchtest.appspot.com");
-                        final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-                        //make request with body
-                        RequestBody body = RequestBody.create(mediaType, json);
-                        Request request = new Request.Builder()
-                                .url(url)
-                                .post(body)
-                                .build();
-                        //complete async request
-                        client.newCall(request).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Log.d(TAG, "FAILURE REQUEST");
-                                e.printStackTrace();
-                            }
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String resp = response.body().string();
-                                Log.d(TAG, response.toString());
-                            }
-                        });
-                    }
+    /*public void postUserInfoToApi(){
+        client = new OkHttpClient();
+        final String url = "https://bodyfatpinchtest.appspot.com/";
+        final String json = "{ 'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "' }";
+        //build url
+        Log.d(TAG, json);
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "FAILURE REQUEST");
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String resp = response.body().string();
+                //set up test
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    Log.d(TAG, response.toString());
+                } else {
+                    Log.d(TAG, "BLEW IT" + response.toString());
                 }
-            });
-        } catch (Exception pe){
-            pe.printStackTrace();
-        }
-    }
+            }
+        });
+    }*/
+
+
 
     public void makeGetRequestToGoogle(){
         try{
@@ -147,9 +143,14 @@ public class MainActivity extends AppCompatActivity {
                                         public void run() {
                                             test1 = (TextView) findViewById(R.id.test1);
                                             test1.setText(email);
-                                            postUserInfoToApi();
                                             Intent menu = new Intent(getApplicationContext(), Menu.class);
-                                            //startActivity(menu);
+                                            menu.putExtra("first_name",first_name);
+                                            menu.putExtra("last_name",last_name);
+                                            menu.putExtra("email",email);
+                                            menu.putExtra("user_id",user_id);
+                                            menu.putExtra("gender",gender);
+                                            startActivity(menu);
+                                            //postUserInfoToApi();
                                         }
                                     });
                                 } catch (JSONException je){

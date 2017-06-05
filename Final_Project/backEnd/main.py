@@ -117,6 +117,10 @@ class MainPage(webapp2.RequestHandler):
 		new_user.last_name = user_data['last_name']
 		new_user.email = user_data['email']
 		new_user.id = user_data['user']
+		if user_data.get('gender') == 'male':
+			new_user.male = True
+		else:
+			new_user.male = False
 		new_user.put()
 		new_user_dict = new_user.to_dict()
 		self.response.write(json.dumps(new_user_dict))
