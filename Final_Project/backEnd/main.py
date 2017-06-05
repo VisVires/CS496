@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from datetime import datetime
+import ast
 import webapp2
 import json
 
@@ -111,19 +112,25 @@ class PinchTest_Handler(webapp2.RequestHandler):
 #test class
 class MainPage(webapp2.RequestHandler):
 	def post(self):
-		user_data = json.loads(self.request.body)
+		user_data = ast.literal_eval(self.request.body)
 		new_user = User()
-		new_user.first_name = user_data['first_name']
-		new_user.last_name = user_data['last_name']
-		new_user.email = user_data['email']
-		new_user.id = user_data['user']
+		users = User.query()
+		for user in users:
+			if user.id == user_data['user']:
+				self.response.write("User already exists")
+				return
 		if user_data.get('gender') == 'male':
 			new_user.male = True
 		else:
 			new_user.male = False
+		new_user.first_name = user_data['first_name']
+		new_user.last_name = user_data['last_name']
+		new_user.email = user_data['email']
+		new_user.id = user_data['user']
 		new_user.put()
 		new_user_dict = new_user.to_dict()
 		self.response.write(json.dumps(new_user_dict))
+
 	def get(self):
 		self.response.write("This is not working properly")
 
