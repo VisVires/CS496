@@ -70,8 +70,6 @@ class Measurement_Handler(webapp2.RequestHandler):
 			if measurement_data.get('calf_circ'):
 				new_measurement.calf_circ = measurement_data['calf_circ']
 			new_measurement.put()
-			#new_measurement.id = new_measurement.key.urlsafe()
-			#new_measurement.put()
 			user.measurements.append(new_measurement)
 			user.put()
 			user_dict = user.to_dict()
@@ -99,8 +97,6 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			new_pinches.subscapular_pinch = pinch_data['subscapular']
 			new_pinches.suprailiac_pinch = pinch_data['suprailiac']
 			new_pinches.put()
-			#new_pinches.id = new_pinches.key.urlsafe()
-			#new_pinches.put()
 			curr_user.pinches.append(new_pinches)
 			curr_user.put()
 			curr_user_dict = curr_user.to_dict()
@@ -120,11 +116,12 @@ class MainPage(webapp2.RequestHandler):
 		new_user.first_name = user_data['first_name']
 		new_user.last_name = user_data['last_name']
 		new_user.email = user_data['email']
-		new_user.put()
-		new_user.id = new_user.key.urlsafe()
+		new_user.id = user_data['user']
 		new_user.put()
 		new_user_dict = new_user.to_dict()
 		self.response.write(json.dumps(new_user_dict))
+	def get(self):
+		self.response.write("This is not working properly")
 
 
 #create patch method
