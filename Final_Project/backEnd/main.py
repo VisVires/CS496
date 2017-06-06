@@ -41,8 +41,8 @@ class User(ndb.Model):
 	last_name = ndb.StringProperty()
 	email = ndb.StringProperty()
 	male = ndb.BooleanProperty()
-	age = ndb.IntegerProperty()
-	height = ndb.IntegerProperty()
+	age = ndb.StringProperty()
+	height = ndb.StringProperty()
 	measurements = ndb.StructuredProperty(Measurement, repeated=True)
 	pinches = ndb.StructuredProperty(Pinches, repeated=True)
 
@@ -150,16 +150,14 @@ class UserHandler(webapp2.RequestHandler):
 				new_user.first_name = user_data['first_name']
 				new_user.last_name = user_data['last_name']
 				new_user.email = user_data['email']
-				age = user_data['age']
-				age = int(age)
-				new_user.age = age
-				new_user.height = int(user_data['height'])
+				new_user.age = user_data['age']
+				new_user.height = user_data['height']
 				new_user.id = user_data['user']
 				new_user.put()
 				self.response.write(json.dumps(new_user.to_dict()))
 
-height = int(user_webapp2.WSGIAp['height'])
-allowed_methods = plication.allowed_methods
+
+allowed_methods = webapp2.WSGIApplication.allowed_methods
 new_allowed_methods = allowed_methods.union(('PATCH',))
 webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 

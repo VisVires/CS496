@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     String gender, user_id, first_name, last_name, email;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-
+    String responseStr;
 
 
     @Override
@@ -72,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*public void postUserInfoToApi(){
+    public void postUserInfoToApi(){
         client = new OkHttpClient();
-        final String url = "https://bodyfatpinchtest.appspot.com/";
-        final String json = "{ 'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "' }";
+        final String url = "https://bodyfatpinchtest.appspot.com";
+        final String json = "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "'}";
         //build url
         Log.d(TAG, json);
         RequestBody body = RequestBody.create(JSON, json);
@@ -91,18 +91,37 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String resp = response.body().string();
                 //set up test
                 if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
+                    responseStr = response.body().string();
                     Log.d(TAG, response.toString());
+                    Log.d(TAG, responseStr);
+                    if (responseStr.equals("User already exists")){
+                        Log.d(TAG, "move to menu");
+                        Intent menu = new Intent(getApplicationContext(), Menu.class);
+                        menu.putExtra("first_name", first_name);
+                        menu.putExtra("last_name", last_name);
+                        menu.putExtra("email", email);
+                        menu.putExtra("user_id", user_id);
+                        menu.putExtra("gender", gender);
+                        startActivity(menu);
+                    } else {
+                        Log.d(TAG, "move to edit user data");
+                        Intent new_user = new Intent(getApplicationContext(), NewUser.class);
+                        new_user.putExtra("first_name", first_name);
+                        new_user.putExtra("last_name", last_name);
+                        new_user.putExtra("email", email);
+                        new_user.putExtra("user_id", user_id);
+                        new_user.putExtra("gender", gender);
+                        startActivity(new_user);
+                    }
+
                 } else {
-                    Log.d(TAG, "BLEW IT" + response.toString());
+                    Log.d(TAG, "BLEW IT " + response.toString());
                 }
             }
         });
-    }*/
-
+    }
 
 
     public void makeGetRequestToGoogle(){
@@ -141,16 +160,8 @@ public class MainActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
+                                            postUserInfoToApi();
                                             test1 = (TextView) findViewById(R.id.test1);
-                                            test1.setText(email);
-                                            Intent menu = new Intent(getApplicationContext(), Menu.class);
-                                            menu.putExtra("first_name",first_name);
-                                            menu.putExtra("last_name",last_name);
-                                            menu.putExtra("email",email);
-                                            menu.putExtra("user_id",user_id);
-                                            menu.putExtra("gender",gender);
-                                            startActivity(menu);
-                                            //postUserInfoToApi();
                                         }
                                     });
                                 } catch (JSONException je){

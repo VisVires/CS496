@@ -14,11 +14,7 @@ import org.w3c.dom.Text;
 public class Pinches extends AppCompatActivity {
 
     private static final String TAG = Pinches.class.getSimpleName();
-    EditText weight;
-    EditText bicep;
-    EditText tricep;
-    EditText subscap;
-    EditText suprailiac;
+    EditText weight, bicep, tricep, subscap, suprailiac;
     Button updateBodyFat;
 
 

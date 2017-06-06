@@ -19,7 +19,8 @@
         <activity android:name=".Pinches" />
         <activity android:name=".Circumference" />
         <activity android:name=".AuthComplete" />
-        <activity android:name=".Menu"></activity>
+        <activity android:name=".Menu" />
+        <activity android:name=".NewUser"></activity>
     </application>
 
 </manifest>

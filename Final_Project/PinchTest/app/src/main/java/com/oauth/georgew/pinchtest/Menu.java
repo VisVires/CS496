@@ -76,7 +76,6 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent getBodyFat = new Intent(getApplicationContext(), Pinches.class);
                 postUserInfoToApi();
-                //startActivity(getBodyFat);
             }
         });
         //Log.d(TAG, CLIENT_ID);
@@ -84,8 +83,8 @@ public class Menu extends AppCompatActivity {
 
     public void postUserInfoToApi(){
         client = new OkHttpClient();
-        final String url = "https://bodyfatpinchtest.appspot.com/";
-        final String json = "{ 'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "' }";
+        final String url = "https://bodyfatpinchtest.appspot.com";
+        final String json = "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "'}";
         //build url
         Log.d(TAG, json);
         RequestBody body = RequestBody.create(JSON, json);
@@ -101,11 +100,11 @@ public class Menu extends AppCompatActivity {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String resp = response.body().string();
                 //set up test
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
                     Log.d(TAG, response.toString());
+                    Log.d(TAG, responseStr);
                 } else {
                     Log.d(TAG, "BLEW IT" + response.toString());
                 }
