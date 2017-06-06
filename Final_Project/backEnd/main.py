@@ -131,12 +131,35 @@ class MainPage(webapp2.RequestHandler):
 		new_user_dict = new_user.to_dict()
 		self.response.write(json.dumps(new_user_dict))
 
-	def get(self):
+	def get(self, id=None):
 		self.response.write("This is not working properly")
 
+class UserHandler(webapp2.RequestHandler):
+	def put(self):
+		user_data = ast.literal_eval(self.request.body)
+		user_id = user_data['user']
+		users = User.query()
+		for user in users:
+			if user.id == user_id:
+				self.response.write("User Found!")
+				new_user = user
+				if user_data.get('gender') == 'male':
+					new_user.male = True
+				else:
+					new_user.male = False
+				new_user.first_name = user_data['first_name']
+				new_user.last_name = user_data['last_name']
+				new_user.email = user_data['email']
+				age = user_data['age']
+				age = int(age)
+				new_user.age = age
+				new_user.height = int(user_data['height'])
+				new_user.id = user_data['user']
+				new_user.put()
+				self.response.write(json.dumps(new_user.to_dict()))
 
-#create patch method
-allowed_methods = webapp2.WSGIApplication.allowed_methods
+height = int(user_webapp2.WSGIAp['height'])
+allowed_methods = plication.allowed_methods
 new_allowed_methods = allowed_methods.union(('PATCH',))
 webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 
@@ -146,5 +169,6 @@ app = webapp2.WSGIApplication([
     ('/measurements', Measurement_Handler),
     ('/pinchtest', PinchTest_Handler),
     ('/measurements/(.*)', Measurement_Handler),
-    ('/pinchtest/(.*)', PinchTest_Handler)
+    ('/pinchtest/(.*)', PinchTest_Handler),
+    ('/user', UserHandler)
 ], debug=True)
