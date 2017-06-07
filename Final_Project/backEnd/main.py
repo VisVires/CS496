@@ -3,6 +3,7 @@ from datetime import datetime
 import ast
 import webapp2
 import json
+import math
 
 
 class Measurement(ndb.Model):
@@ -92,6 +93,45 @@ class Measurement_Handler(webapp2.RequestHandler):
 
 
 class PinchTest_Handler(webapp2.RequestHandler):
+	
+	global findLogSum
+	global findBodyDensity
+	global siriEquation
+
+	def findLogSum(bicep, tricep, subscapular, suprailiac):
+		return math.log10(bicep + tricep + subscapular + suprailiac)
+	
+	def findBodyDensity(pinch_sum, user_age, male):
+		if male == True:
+			if user_age <= 17:
+				return 1.1533 - (.0643 * pinch_sum)
+			elif user_age <= 19:
+				return 1.1620 - (.0630 * pinch_sum)
+			elif user_age <= 29:
+				return 1.1631 - (.0632 * pinch_sum)
+			elif user_age <= 39:
+				return 1.1422 - (.0544 * pinch_sum)
+			elif user_age <= 49:
+				return 1.1620 - (.0700 * pinch_sum)
+			else:
+				return 1.715 - (.0779 * pinch_sum)
+		else:
+			if user_age <= 17:
+				return 1.1369 - (.0598 * pinch_sum)
+			elif user_age <= 19:
+				return 1.1549 - (.0678 * pinch_sum)
+			elif user_age <= 29:
+				return 1.1599 - (.0717 * pinch_sum)
+			elif user_age <= 39:
+				return 1.1423 - (.0632 * pinch_sum)
+			elif user_age <= 49:
+				return 1.1333 - (.0612 * pinch_sum)
+			else:
+				return 1.339 - (.0645 * pinch_sum)
+
+	def siriEquation(density):
+		return (495/density) - 450
+
 	#add new set of pinches for 4 pinch test
 	def post(self, user_id):
 		pinch_data = ast.literal_eval(self.request.body)
@@ -100,12 +140,25 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			for user in users:
 				if user.id == user_id:
 					curr_user = user
+			if pinch_data.get('weight'):
+				curr_user.weight.append(float(pinch_data['weight']))
 			current_date = datetime.now().date().strftime('%m/%d/%Y')
 			new_pinches = Pinches(pinch_test_date=current_date)
-			new_pinches.bicep_pinch = float(pinch_data['bicep'])
-			new_pinches.tricep_pinch = float(pinch_data['tricep'])
-			new_pinches.subscapular_pinch = float(pinch_data['subscapular'])
-			new_pinches.suprailiac_pinch = float(pinch_data['suprailiac'])
+			bicep = float(pinch_data['bicep'])
+			new_pinches.bicep_pinch = bicep
+			tricep = float(pinch_data['tricep'])
+			new_pinches.tricep_pinch = tricep
+			subscapular = float(pinch_data['subscapular'])
+			new_pinches.subscapular_pinch = subscapular 
+			suprailiac = float(pinch_data['suprailiac'])
+			new_pinches.suprailiac_pinch = suprailiac
+			pinch_sum = findLogSum(bicep, tricep, subscapular ,suprailiac)
+			male = curr_user.male
+			user_age = curr_user.age
+			density = findBodyDensity(pinch_sum, user_age, male)
+			new_pinches.body_density_measure = density
+			body_fat = siriEquation(density)
+			new_pinches.body_fat_measure = body_fat
 			new_pinches.put()
 			curr_user.pinches.append(new_pinches)
 			curr_user.put()
@@ -120,6 +173,8 @@ class PinchTest_Handler(webapp2.RequestHandler):
 					curr_user = user
 					curr_user_pinches = curr_user.pinches[0].to_dict()
 					self.response.write(json.dumps(curr_user_pinches))
+
+	
 
 #test class
 class MainPage(webapp2.RequestHandler):
