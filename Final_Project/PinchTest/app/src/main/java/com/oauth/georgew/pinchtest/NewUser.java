@@ -95,7 +95,7 @@ public class NewUser extends AppCompatActivity {
         client = new OkHttpClient();
         final String url = "https://bodyfatpinchtest.appspot.com/user";
         final String json = "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" +
-                gender + "', 'age': '" + age + "', 'height': '" + height + "'}";
+                gender + "', 'age': '" + age + "', 'height': '" + height + "' , 'weight': '" + weight + "'}";
         //build url
         Log.d(TAG, json);
         RequestBody body = RequestBody.create(JSON, json);
@@ -117,7 +117,15 @@ public class NewUser extends AppCompatActivity {
                     Log.d(TAG, response.toString());
                     Log.d(TAG, responseStr);
                     Intent menu = new Intent(getApplicationContext(), Menu.class);
-                    //startActivity(menu);
+                    menu.putExtra("last_name", last_name);
+                    menu.putExtra("first_name", first_name);
+                    menu.putExtra("gender", gender);
+                    menu.putExtra("user_id", user_id);
+                    menu.putExtra("email", email);
+                    menu.putExtra("age", age);
+                    menu.putExtra("height", height);
+                    menu.putExtra("weight", weight);
+                    startActivity(menu);
 
                 } else {
                     Log.d(TAG, "BLEW IT " + response.toString());
@@ -125,5 +133,4 @@ public class NewUser extends AppCompatActivity {
             }
         });
     }
-
 }

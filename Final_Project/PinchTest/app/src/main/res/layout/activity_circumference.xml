@@ -149,6 +149,7 @@
             android:layout_weight="1"/>
     </LinearLayout>
     <Button
+        android:id="@+id/calc_circum_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="true"

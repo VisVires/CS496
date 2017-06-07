@@ -19,6 +19,7 @@ import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,8 +40,8 @@ public class Menu extends AppCompatActivity {
     Button bodyFatButton;
     Button circumButton;
     private OkHttpClient client;
-    TextView greeting;
-    String gender, user_id, first_name, last_name, email;
+    TextView greeting, test, age_output, height_output, weight_output;
+    String gender, user_id, first_name, last_name, age, weight, height;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
@@ -51,21 +52,17 @@ public class Menu extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         greeting = (TextView) findViewById(R.id.greeting);
-        gender = getIntent().getStringExtra("gender");
         user_id = getIntent().getStringExtra("user_id");
-        first_name = getIntent().getStringExtra("first_name");
-        last_name = getIntent().getStringExtra("last_name");
-        email = getIntent().getStringExtra("email");
-        greeting.setText("Hello " + first_name + " " + last_name + "!");
 
-                //set up circumference button
+        //makeGetRequest("https://bodyfatpinchtest.appspot.com/user/" + user_id);
+        //set up circumference button
         circumButton = (Button) findViewById(R.id.circum_button);
         circumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getCircum = new Intent(getApplicationContext(), Circumference.class);
-                postUserInfoToApi();
-                //startActivity(getCircum);
+                getCircum.putExtra("user_id", user_id);
+                startActivity(getCircum);
             }
         });
 
@@ -75,22 +72,24 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent getBodyFat = new Intent(getApplicationContext(), Pinches.class);
-                postUserInfoToApi();
+                getBodyFat.putExtra("user_id", user_id);
+                startActivity(getBodyFat);
             }
         });
         //Log.d(TAG, CLIENT_ID);
     }
 
-    public void postUserInfoToApi(){
+    @Override
+    protected void onStart(){
+        makeGetRequest("https://bodyfatpinchtest.appspot.com/user/" + user_id);
+        super.onStart();
+    }
+
+    public void makeGetRequest(String url) {
+
         client = new OkHttpClient();
-        final String url = "https://bodyfatpinchtest.appspot.com";
-        final String json = "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" + gender + "'}";
-        //build url
-        Log.d(TAG, json);
-        RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
-                .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -98,16 +97,38 @@ public class Menu extends AppCompatActivity {
                 Log.d(TAG, "FAILURE REQUEST");
                 e.printStackTrace();
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                //set up test
-                if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    Log.d(TAG, response.toString());
-                    Log.d(TAG, responseStr);
-                } else {
-                    Log.d(TAG, "BLEW IT" + response.toString());
-                }
+                final String resp = response.body().string();
+                    //set up test
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                JSONObject jsonObject = new JSONObject(resp);
+                                first_name = jsonObject.getString("first_name");
+                                last_name = jsonObject.getString("last_name");
+                                age = jsonObject.getString("age");
+                                height = jsonObject.getString("height");
+                                test = (TextView) findViewById(R.id.test);
+                                age_output = (TextView) findViewById(R.id.age);
+                                height_output = (TextView) findViewById(R.id.height);
+                                weight_output = (TextView) findViewById(R.id.weight);
+
+                                greeting.setText("Welcome Back " + first_name + " " + last_name + "!");
+                                age_output.setText(age);
+                                Integer height_in_inches = Integer.parseInt(height);
+                                Integer feet = height_in_inches/12;
+                                Integer inches = height_in_inches%12;
+                                height_output.setText(feet + "\"" + inches + "'");
+                                Log.d(TAG, resp);
+                            } catch (JSONException je){
+                                je.printStackTrace();
+                            }
+                        }
+                    });
             }
         });
     }
