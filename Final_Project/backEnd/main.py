@@ -207,8 +207,9 @@ class UserHandler(webapp2.RequestHandler):
 		users = User.query()
 		for user in users:
 			if user.id == user_id:
-				#self.response.write("User Found!")
 				new_user = user
+				if user_data.get('weight'):
+					new_user.weight.append(float(user_data['weight']))
 				if user_data.get('gender') == 'male':
 					new_user.male = True
 				else:
@@ -217,9 +218,9 @@ class UserHandler(webapp2.RequestHandler):
 				new_user.last_name = user_data['last_name']
 				new_user.email = user_data['email']
 				new_user.age = int(user_data['age'])
-				new_user.height = int(user_data['height'])
+				if user_data.get('height'):
+					new_user.height = int(user_data['height'])
 				new_user.id = user_data['user']
-				weight = int(user_data['weight'])
 				new_user.put()
 				self.response.write(json.dumps(new_user.to_dict()))
 

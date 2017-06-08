@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d(TAG, "FAILURE REQUEST");
+                Log.d(TAG, "FAILURE REQUEST 2");
                 e.printStackTrace();
             }
             @Override
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Log.d(TAG, "FAILURE REQUEST");
+                                Log.d(TAG, "FAILURE REQUEST 1");
                                 e.printStackTrace();
                             }
                             @Override
