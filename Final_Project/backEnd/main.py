@@ -103,7 +103,7 @@ class PinchTest_Handler(webapp2.RequestHandler):
 	
 	def findBodyDensity(pinch_sum, user_age, male):
 		if male == True:
-			if user_age <= 17:
+			if user_age < 17:
 				return 1.1533 - (.0643 * pinch_sum)
 			elif user_age <= 19:
 				return 1.1620 - (.0630 * pinch_sum)
@@ -116,7 +116,7 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			else:
 				return 1.715 - (.0779 * pinch_sum)
 		else:
-			if user_age <= 17:
+			if user_age < 17:
 				return 1.1369 - (.0598 * pinch_sum)
 			elif user_age <= 19:
 				return 1.1549 - (.0678 * pinch_sum)
