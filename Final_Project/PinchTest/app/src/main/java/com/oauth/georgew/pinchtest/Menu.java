@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +52,8 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         greeting = (TextView) findViewById(R.id.greeting);
         user_id = getIntent().getStringExtra("user_id");
@@ -129,8 +132,8 @@ public class Menu extends AppCompatActivity {
                                 //set up body fat
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");
                                 if(pinches.length() > 0) {
-                                    bodyFat = pinches.getJSONObject(0).getDouble("body_fat_measure");
-                                    bodyDensity = pinches.getJSONObject(0).getDouble("body_density_measure");
+                                    bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
+                                    bodyDensity = pinches.getJSONObject(pinches.length()-1).getDouble("body_density_measure");
                                     bodyFat = round(bodyFat,2);
                                     body_fat_output.setText(bodyFat.toString());
                                     bodyDensity = round(bodyDensity,2);
@@ -139,7 +142,7 @@ public class Menu extends AppCompatActivity {
                                 //set up weight
                                 JSONArray weightArray = jsonObject.getJSONArray("weight");
                                 if (weightArray.length() > 0) {
-                                    weight = weightArray.getDouble(0);
+                                    weight = weightArray.getDouble(weightArray.length()-1);
                                     weight_output.setText(weight.toString());
                                     Double bmi = calcBMI(height_in_inches, weight);
                                     bmi_output.setText(bmi.toString());

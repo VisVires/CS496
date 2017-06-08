@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.oauth.georgew.pinchtest.Menu">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <TextView
         android:id="@+id/greeting"
         android:layout_width="match_parent"
@@ -116,18 +124,26 @@
         android:id="@+id/calc_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:text="@string/bodyfat_button"/>
     <Button
         android:id="@+id/circum_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:text="@string/circum_button"/>
     <Button
+        android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:text="@string/logout_button"/>
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:text="@string/delete_button"/>
 </LinearLayout>

@@ -30,4 +30,6 @@
     <string name="na">N/A</string>
     <string name="back_button">Back</string>
     <string name="logout_button">Logout</string>
+    <string name="delete_button">Delete Account</string>
+    <string name="account_settings">Account Settings</string>
 </resources>

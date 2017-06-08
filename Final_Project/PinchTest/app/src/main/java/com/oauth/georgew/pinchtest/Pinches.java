@@ -3,6 +3,7 @@ package com.oauth.georgew.pinchtest;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +44,8 @@ public class Pinches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pinches);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         user_id = getIntent().getStringExtra("user_id");
 
@@ -62,18 +65,6 @@ public class Pinches extends AppCompatActivity {
         tricep_input.addTextChangedListener(textWatcher);
         subscap_input.addTextChangedListener(textWatcher);
         suprailiac_input.addTextChangedListener(textWatcher);
-
-        //set up textviews
-        bodyFatText = (TextView)findViewById(R.id.body_fat_text);
-        bodyFatOutput = (TextView)findViewById(R.id.body_fat_output);
-        fatMassText = (TextView)findViewById(R.id.fat_mass_text);
-        fatMass = (TextView)findViewById(R.id.fat_mass_output);
-        leanBodyMassText = (TextView)findViewById(R.id.lean_body_mass_text);
-        leanBodyMass = (TextView)findViewById(R.id.lean_body_mass_output);
-
-        bodyFatText.setText(getResources().getString(R.string.bodyfat));
-        fatMassText.setText(getResources().getString(R.string.fatmass));
-        leanBodyMassText.setText(getResources().getString(R.string.leanbodymass));
 
 
         updateBodyFat.setOnClickListener(new View.OnClickListener() {
@@ -139,30 +130,49 @@ public class Pinches extends AppCompatActivity {
                 //set up test
                 if (response.isSuccessful()) {
                     responseStr = response.body().string();
-                    try{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
 
-                        JSONObject jsonObject = new JSONObject(responseStr);
-                        JSONArray weightArray = jsonObject.getJSONArray("weight");
-                        weight_output = weightArray.getDouble(0);
-                        JSONArray pinches = jsonObject.getJSONArray("pinches");
+                                setTextViews();
 
-                        if(pinches.length() > 0) {
-                            Double bodyFat = pinches.getJSONObject(0).getDouble("body_fat_measure");
-                            Log.d(TAG, bodyFat.toString());
-                            String bf = round(bodyFat,2).toString();
-                            //bodyFatOutput.setText(bf);
-                            //fatMass.setText(round((weight_output - (weight_output * (bodyFat/100))),1).toString());
-                            //leanBodyMass.setText(round((weight_output * (bodyFat/100)),1).toString());
+                                JSONObject jsonObject = new JSONObject(responseStr);
+                                JSONArray weightArray = jsonObject.getJSONArray("weight");
+                                weight_output = weightArray.getDouble(weightArray.length() - 1);
+                                JSONArray pinches = jsonObject.getJSONArray("pinches");
+
+                                if (pinches.length() > 0) {
+                                    Double bodyFat = pinches.getJSONObject(0).getDouble("body_fat_measure");
+                                    bodyFatOutput.setText(round(bodyFat, 2).toString()+ " %");
+                                    fatMass.setText((calcFatMass(bodyFat,weight_output))+ " lbs");
+                                    leanBodyMass.setText((calcLeanBodyMass(bodyFat,weight_output)) + " lbs");
+                                }
+
+                            } catch (JSONException je) {
+                                je.printStackTrace();
+                            }
                         }
-
-                    } catch (JSONException je){
-                        je.printStackTrace();
-                    }
+                    });
                 } else {
                     Log.d(TAG, "BLEW IT " + response.toString());
                 }
             }
         });
+    }
+
+    private void setTextViews(){
+        //set up textviews
+        bodyFatText = (TextView)findViewById(R.id.body_fat_text);
+        bodyFatOutput = (TextView)findViewById(R.id.body_fat_output);
+        fatMassText = (TextView)findViewById(R.id.fat_mass_text);
+        fatMass = (TextView)findViewById(R.id.fat_mass_output);
+        leanBodyMassText = (TextView)findViewById(R.id.lean_body_mass_text);
+        leanBodyMass = (TextView)findViewById(R.id.lean_body_mass_output);
+
+        bodyFatText.setText(getResources().getString(R.string.bodyfat));
+        fatMassText.setText(getResources().getString(R.string.fatmass));
+        leanBodyMassText.setText(getResources().getString(R.string.leanbodymass));
     }
 
     //https://stackoverflow.com/questions/22186778/using-math-round-to-round-to-one-decimal-place
