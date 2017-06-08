@@ -21,7 +21,8 @@
     <string name="hips">Hips</string>
     <string name="thigh">Thigh</string>
     <string name="calf">Calf</string>
-    <string name="bodyfat_button">Update Body Fat</string>
+    <string name="update_button">Update Body Fat</string>
+    <string name="add_button">Add Body Fat</string>
     <string name="get_started">Get Current Stats</string>
     <string name="circum_button">Update Circumference Measurements</string>
     <string name="new_user_button">Input User Data</string>

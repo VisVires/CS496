@@ -7,10 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +40,30 @@ public class Pinches extends AppCompatActivity {
     OkHttpClient client;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sign_out: {
+                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.delete_profile: {
+                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     @Override
@@ -143,7 +169,7 @@ public class Pinches extends AppCompatActivity {
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");
 
                                 if (pinches.length() > 0) {
-                                    Double bodyFat = pinches.getJSONObject(0).getDouble("body_fat_measure");
+                                    Double bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
                                     bodyFatOutput.setText(round(bodyFat, 2).toString()+ " %");
                                     fatMass.setText((calcFatMass(bodyFat,weight_output))+ " lbs");
                                     leanBodyMass.setText((calcLeanBodyMass(bodyFat,weight_output)) + " lbs");

@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -50,8 +52,27 @@ public class MainActivity extends AppCompatActivity {
     String gender, user_id, first_name, last_name, email;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    String responseStr;
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sign_out: {
+                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.delete_profile: {
+                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
 
         //set up authorization
         CLIENT_ID = getString(R.string.CLIENT_ID);
@@ -73,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    String responseStr;
 
 
     public void postUserInfoToApi(){

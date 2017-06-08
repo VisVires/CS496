@@ -120,30 +120,29 @@
             android:layout_weight="1"
             android:text="@string/na"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/calc_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="@string/bodyfat_button"/>
+        android:weightSum="2">
+        <Button
+            android:id="@+id/calc_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_weight="1"
+            android:text="@string/add_button"/>
+        <Button
+            android:id="@+id/mod_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_weight="1"
+            android:text="@string/update_button"/>
+    </LinearLayout>
     <Button
         android:id="@+id/circum_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
         android:text="@string/circum_button"/>
-    <Button
-        android:id="@+id/logout_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        android:text="@string/logout_button"/>
-    <Button
-        android:id="@+id/delete_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="15dp"
-        android:text="@string/delete_button"/>
 </LinearLayout>

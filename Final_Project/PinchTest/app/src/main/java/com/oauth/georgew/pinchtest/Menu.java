@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -46,6 +48,30 @@ public class Menu extends AppCompatActivity {
     Double weight, bodyFat, bodyDensity;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sign_out: {
+                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.delete_profile: {
+                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     @Override
