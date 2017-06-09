@@ -1,6 +1,7 @@
 package com.oauth.georgew.pinchtest;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -44,6 +45,7 @@ public class Menu extends AppCompatActivity {
     private OkHttpClient client;
     TextView greeting, test, age_output, height_output, weight_output, body_fat_output, bmi_output;
     String gender, user_id, first_name, last_name, age, height;
+    int height_in_inches;
     Double weight, bodyFat, bodyDensity;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -59,8 +61,7 @@ public class Menu extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.update_user: {
-                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
-                startActivity(update_user);
+                Common.goToUpdateUserInfo(user_id, this);
                 return true;
             }
             case R.id.action_sign_out: {
@@ -69,7 +70,10 @@ public class Menu extends AppCompatActivity {
                 return true;
             }
             case R.id.delete_profile: {
-                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                Common.deleteUser(user_id);
+                Common.makeToast("Deleted User", this);
+                Intent home = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(home);
                 return true;
             }
             default:
@@ -117,12 +121,12 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent update_pinches = new Intent(getApplicationContext(), UpdatePinches.class);
+                update_pinches.putExtra("user_id", user_id);
                 startActivity(update_pinches);
             }
         });
-
-
     }
+
 
     @Override
     protected void onStart(){
@@ -163,12 +167,16 @@ public class Menu extends AppCompatActivity {
 
                                 //set age
                                 age = jsonObject.getString("age");
-                                age_output.setText(age);
+                                if (age != null) {
+                                    age_output.setText(age);
+                                }
 
                                 //set height
                                 height = jsonObject.getString("height");
-                                int height_in_inches = Integer.parseInt(height);
-                                height_output.setText(Common.heightOutput(height_in_inches));
+                                if(height != null) {
+                                    height_in_inches = Integer.parseInt(height);
+                                    height_output.setText(Common.heightOutput(height_in_inches));
+                                }
 
                                 //set up body fat
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");

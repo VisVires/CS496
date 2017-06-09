@@ -47,8 +47,7 @@ public class Circumference extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.update_user: {
-                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
-                startActivity(update_user);
+                Common.goToUpdateUserInfo(user_id, this);
                 return true;
             }
             case R.id.action_sign_out: {
@@ -57,7 +56,10 @@ public class Circumference extends AppCompatActivity {
                 return true;
             }
             case R.id.delete_profile: {
-                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                Common.deleteUser(user_id);
+                Common.makeToast("Deleted User", this);
+                Intent home = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(home);
                 return true;
             }
             default:

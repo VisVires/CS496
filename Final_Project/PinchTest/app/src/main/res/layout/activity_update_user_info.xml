@@ -18,12 +18,12 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:weightSum="4">
         <TextView
             android:id="@+id/update_email_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:textSize="20dp"
             android:text="@string/email"/>
         <EditText
@@ -37,12 +37,12 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:weightSum="4">
         <TextView
             android:id="@+id/update_age_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:textSize="20dp"
             android:text="@string/age"/>
         <EditText
@@ -56,12 +56,12 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:weightSum="4">
         <TextView
             android:id="@+id/update_height_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:textSize="20dp"
             android:text="@string/height"/>
         <EditText
@@ -85,8 +85,8 @@
             android:layout_weight="1"
             android:text="@string/update_user_button"/>
         <Button
-            android:layout_weight="1"
             android:id="@+id/update_user_back_button"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/back_button"/>

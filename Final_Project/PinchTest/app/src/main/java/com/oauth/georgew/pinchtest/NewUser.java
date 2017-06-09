@@ -37,7 +37,7 @@ public class NewUser extends AppCompatActivity {
     String responseStr;
     private static final String TAG = NewUser.class.getSimpleName();
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -48,8 +48,7 @@ public class NewUser extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.update_user: {
-                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
-                startActivity(update_user);
+                 Common.goToUpdateUserInfo(user_id, this);
                 return true;
             }
             case R.id.action_sign_out: {
@@ -58,13 +57,16 @@ public class NewUser extends AppCompatActivity {
                 return true;
             }
             case R.id.delete_profile: {
-                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                Common.deleteUser(user_id);
+                Common.makeToast("Deleted User", this);
+                Intent home = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(home);
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
 
     @Override

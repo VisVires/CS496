@@ -41,6 +41,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.ContentValues.TAG;
+
 public class MainActivity extends AppCompatActivity {
 
     String CLIENT_ID;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     String gender, user_id, first_name, last_name, email;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
@@ -73,12 +75,13 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.delete_profile: {
                 Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
+                deleteUser(user_id, this);
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +219,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart(){
         authState = getOrCreateAuthState();
         super.onStart();
+    }
+
+    public void deleteUser(String user, final Context context) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://bodyfatpinchtest.appspot.com/user/" + user;
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "FAILURE REQUEST 1");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String resp = response.body().string();
+                Log.d(TAG, resp);
+
+            }
+        });
     }
 
     AuthState getOrCreateAuthState(){
