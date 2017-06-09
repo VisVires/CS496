@@ -51,8 +51,14 @@ public class Pinches extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update_user: {
+                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
+                startActivity(update_user);
+                return true;
+            }
             case R.id.action_sign_out: {
-                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Common.logOut(this);
+                this.finishAffinity();
                 return true;
             }
             case R.id.delete_profile: {
@@ -170,9 +176,9 @@ public class Pinches extends AppCompatActivity {
 
                                 if (pinches.length() > 0) {
                                     Double bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
-                                    bodyFatOutput.setText(round(bodyFat, 2).toString()+ " %");
-                                    fatMass.setText((calcFatMass(bodyFat,weight_output))+ " lbs");
-                                    leanBodyMass.setText((calcLeanBodyMass(bodyFat,weight_output)) + " lbs");
+                                    bodyFatOutput.setText(Common.round(bodyFat, 2).toString()+ " %");
+                                    fatMass.setText((Common.calcFatMass(bodyFat,weight_output))+ " lbs");
+                                    leanBodyMass.setText((Common.calcLeanBodyMass(bodyFat,weight_output)) + " lbs");
                                 }
 
                             } catch (JSONException je) {
@@ -199,19 +205,5 @@ public class Pinches extends AppCompatActivity {
         bodyFatText.setText(getResources().getString(R.string.bodyfat));
         fatMassText.setText(getResources().getString(R.string.fatmass));
         leanBodyMassText.setText(getResources().getString(R.string.leanbodymass));
-    }
-
-    //https://stackoverflow.com/questions/22186778/using-math-round-to-round-to-one-decimal-place
-    private static Double round (double value, int precision) {
-        int scale = (int) Math.pow(10, precision);
-        return (double) Math.round(value * scale) / scale;
-    }
-
-    private String calcLeanBodyMass(Double bodyfat, Double weight_output){
-        return round((weight_output - (weight_output * (bodyfat/100))),1).toString();
-    }
-
-    private String calcFatMass(Double bodyfat, Double weight_output){
-        return round((weight_output * (bodyfat/100)),1).toString();
     }
 }

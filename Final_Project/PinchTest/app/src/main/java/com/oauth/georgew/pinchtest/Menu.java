@@ -40,8 +40,7 @@ import okhttp3.Response;
 public class Menu extends AppCompatActivity {
 
     private static final String TAG = Menu.class.getSimpleName();
-    Button bodyFatButton;
-    Button circumButton;
+    Button bodyFatButton, circumButton, updateBodyFat;
     private OkHttpClient client;
     TextView greeting, test, age_output, height_output, weight_output, body_fat_output, bmi_output;
     String gender, user_id, first_name, last_name, age, height;
@@ -59,8 +58,14 @@ public class Menu extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update_user: {
+                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
+                startActivity(update_user);
+                return true;
+            }
             case R.id.action_sign_out: {
-                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Common.logOut(this);
+                this.finishAffinity();
                 return true;
             }
             case R.id.delete_profile: {
@@ -84,7 +89,6 @@ public class Menu extends AppCompatActivity {
         greeting = (TextView) findViewById(R.id.greeting);
         user_id = getIntent().getStringExtra("user_id");
 
-        //makeGetRequest("https://bodyfatpinchtest.appspot.com/user/" + user_id);
         //set up circumference button
         circumButton = (Button) findViewById(R.id.circum_button);
         circumButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +110,18 @@ public class Menu extends AppCompatActivity {
                 startActivity(getBodyFat);
             }
         });
-        //Log.d(TAG, CLIENT_ID);
+
+        //set up update body fat button
+        updateBodyFat = (Button) findViewById(R.id.mod_button);
+        updateBodyFat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent update_pinches = new Intent(getApplicationContext(), UpdatePinches.class);
+                startActivity(update_pinches);
+            }
+        });
+
+
     }
 
     @Override
@@ -153,16 +168,16 @@ public class Menu extends AppCompatActivity {
                                 //set height
                                 height = jsonObject.getString("height");
                                 int height_in_inches = Integer.parseInt(height);
-                                height_output.setText(heightOutput(height_in_inches));
+                                height_output.setText(Common.heightOutput(height_in_inches));
 
                                 //set up body fat
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");
                                 if(pinches.length() > 0) {
                                     bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
                                     bodyDensity = pinches.getJSONObject(pinches.length()-1).getDouble("body_density_measure");
-                                    bodyFat = round(bodyFat,2);
+                                    bodyFat = Common.round(bodyFat,2);
                                     body_fat_output.setText(bodyFat.toString());
-                                    bodyDensity = round(bodyDensity,2);
+                                    bodyDensity = Common.round(bodyDensity,2);
                                 }
 
                                 //set up weight
@@ -170,7 +185,7 @@ public class Menu extends AppCompatActivity {
                                 if (weightArray.length() > 0) {
                                     weight = weightArray.getDouble(weightArray.length()-1);
                                     weight_output.setText(weight.toString());
-                                    Double bmi = calcBMI(height_in_inches, weight);
+                                    Double bmi = Common.calcBMI(height_in_inches, weight);
                                     bmi_output.setText(bmi.toString());
                                 }
 
@@ -184,22 +199,6 @@ public class Menu extends AppCompatActivity {
                     });
             }
         });
-    }
-
-    private String heightOutput(int height){
-        int feet = height/12;
-        int inches = height%12;
-        return (feet + "\"" + inches + "'");
-    }
-
-    //https://stackoverflow.com/questions/22186778/using-math-round-to-round-to-one-decimal-place
-    private static double round (double value, int precision) {
-        int scale = (int) Math.pow(10, precision);
-        return (double) Math.round(value * scale) / scale;
-    }
-
-    private double calcBMI(int height, Double weight){
-        return round((weight * 703)/(Math.pow(height,2)),1);
     }
 
     private void setUpTextViews(){

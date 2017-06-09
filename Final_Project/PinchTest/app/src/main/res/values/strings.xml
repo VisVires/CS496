@@ -21,16 +21,18 @@
     <string name="hips">Hips</string>
     <string name="thigh">Thigh</string>
     <string name="calf">Calf</string>
+    <string name="email">Email</string>
     <string name="update_button">Update Body Fat</string>
     <string name="add_button">Add Body Fat</string>
     <string name="get_started">Get Current Stats</string>
-    <string name="circum_button">Update Circumference Measurements</string>
+    <string name="circum_button">Add Circumference Measurements</string>
     <string name="new_user_button">Input User Data</string>
     <string name="CLIENT_ID">57051147513-fnfoo9582m7rq2uef58kmtkn5ltm4pfu.apps.googleusercontent.com</string>
     <string name="API_KEY">AIzaSyCcF487gp7YyxioCyWMx0UNL5O4OIrteto</string>
     <string name="na">N/A</string>
     <string name="back_button">Back</string>
-    <string name="logout_button">Logout</string>
     <string name="delete_button">Delete Account</string>
     <string name="account_settings">Account Settings</string>
+    <string name="logout_button">Logout</string>
+    <string name="update_user_button">Edit My Info</string>
 </resources>

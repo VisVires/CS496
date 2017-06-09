@@ -27,9 +27,9 @@ import okhttp3.Response;
 public class NewUser extends AppCompatActivity {
 
     String first_name, last_name, email, user_id, gender;
-    String weight, height, age;
+    String height, age;
     TextView greeting;
-    EditText age_input, weight_input, height_input;
+    EditText age_input, height_input;
     Button input_user;
     private OkHttpClient client;
     public static final MediaType JSON
@@ -47,8 +47,14 @@ public class NewUser extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update_user: {
+                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
+                startActivity(update_user);
+                return true;
+            }
             case R.id.action_sign_out: {
-                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Common.logOut(this);
+                this.finishAffinity();
                 return true;
             }
             case R.id.delete_profile: {
@@ -81,9 +87,6 @@ public class NewUser extends AppCompatActivity {
         age_input = (EditText)findViewById(R.id.age_input);
         age_input.addTextChangedListener(textWatcher);
 
-        weight_input = (EditText)findViewById(R.id.weight_input);
-        weight_input.addTextChangedListener(textWatcher);
-
         height_input = (EditText)findViewById(R.id.height_input);
         height_input.addTextChangedListener(textWatcher);
 
@@ -95,7 +98,6 @@ public class NewUser extends AppCompatActivity {
             public void onClick(View v) {
                 age = age_input.getText().toString();
                 height = height_input.getText().toString();
-                weight = weight_input.getText().toString();
                 putNewUserInDatastore();
             }
         });
@@ -111,7 +113,7 @@ public class NewUser extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(age_input.getText().toString().length() == 0 || weight_input.getText().toString().length() == 0 || height_input.getText().toString().length() == 0)
+            if(age_input.getText().toString().length() == 0 || height_input.getText().toString().length() == 0)
             {
                 input_user.setEnabled(false);
             } else {
@@ -125,7 +127,7 @@ public class NewUser extends AppCompatActivity {
         client = new OkHttpClient();
         final String url = "https://bodyfatpinchtest.appspot.com/user";
         final String json = "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email + "', 'user': '" + user_id + "', 'gender': '" +
-                gender + "', 'age': '" + age + "', 'height': '" + height + "' , 'weight': '" + weight + "'}";
+                gender + "', 'age': '" + age + "', 'height': '" + height + "'}";
         //build url
         Log.d(TAG, json);
         RequestBody body = RequestBody.create(JSON, json);
@@ -154,7 +156,6 @@ public class NewUser extends AppCompatActivity {
                     menu.putExtra("email", email);
                     menu.putExtra("age", age);
                     menu.putExtra("height", height);
-                    menu.putExtra("weight", weight);
                     startActivity(menu);
 
                 } else {

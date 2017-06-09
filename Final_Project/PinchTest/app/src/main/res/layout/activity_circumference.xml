@@ -156,10 +156,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/calc_circum_button"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="true"
-        android:text="@string/circum_button"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center|bottom">
+        <Button
+            android:id="@+id/calc_circum_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:text="@string/circum_button"/>
+        <Button
+            android:id="@+id/circ_back_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/back_button"/>
+    </LinearLayout>
 </LinearLayout>

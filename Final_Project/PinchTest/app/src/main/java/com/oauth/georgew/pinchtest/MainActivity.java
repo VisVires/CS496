@@ -1,6 +1,7 @@
 package com.oauth.georgew.pinchtest;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private AuthState authState;
     private OkHttpClient client;
     Button get_started;
-    TextView test1;
     String gender, user_id, first_name, last_name, email;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -61,8 +61,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update_user: {
+                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
+                startActivity(update_user);
+                return true;
+            }
             case R.id.action_sign_out: {
-                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Common.logOut(this);
+                this.finishAffinity();
                 return true;
             }
             case R.id.delete_profile: {
@@ -151,12 +157,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void makeGetRequestToGoogle(){
-        try{
-            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction(){
+    public void makeGetRequestToGoogle() {
+        try {
+            authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
                 @Override
                 public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException ae) {
-                    if(ae == null){
+                    if (ae == null) {
                         client = new OkHttpClient();
                         Log.d(TAG, accessToken);
                         HttpUrl url = HttpUrl.parse("https://www.googleapis.com/plus/v1/people/me");
@@ -171,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(TAG, "FAILURE REQUEST 1");
                                 e.printStackTrace();
                             }
+
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 final String resp = response.body().string();
@@ -188,10 +195,9 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             postUserInfoToApi();
-                                            test1 = (TextView) findViewById(R.id.test1);
                                         }
                                     });
-                                } catch (JSONException je){
+                                } catch (JSONException je) {
                                     je.printStackTrace();
                                 }
 
@@ -200,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

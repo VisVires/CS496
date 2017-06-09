@@ -46,8 +46,14 @@ public class Circumference extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.update_user: {
+                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
+                startActivity(update_user);
+                return true;
+            }
             case R.id.action_sign_out: {
-                Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+                Common.logOut(this);
+                this.finishAffinity();
                 return true;
             }
             case R.id.delete_profile: {
