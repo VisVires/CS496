@@ -210,14 +210,22 @@ class UserHandler(webapp2.RequestHandler):
 				new_user = user
 				if user_data.get('weight'):
 					new_user.weight.append(float(user_data['weight']))
-				if user_data.get('gender') == 'male':
-					new_user.male = True
+				if user_data.get('gender'):
+					if user_data.get('gender') == 'male':
+						new_user.male = True
+					else:
+						new_user.male = False
 				else:
-					new_user.male = False
+					new_user.male = user.male;
+				new_user.weight = user.weight;
+				new_user.pinches = user.pinches;
+				new_user.measurements = user.measurements;
 				new_user.first_name = user_data['first_name']
 				new_user.last_name = user_data['last_name']
-				new_user.email = user_data['email']
-				new_user.age = int(user_data['age'])
+				if user_data.get('email'):
+					new_user.email = user_data['email']
+				if user_data.get('age'):
+					new_user.age = int(user_data['age'])
 				if user_data.get('height'):
 					new_user.height = int(user_data['height'])
 				new_user.id = user_data['user']
@@ -232,6 +240,17 @@ class UserHandler(webapp2.RequestHandler):
 				if user.id == user_id:
 					curr_user = user
 					self.response.write(json.dumps(curr_user.to_dict()))
+
+	def delete(self, user_id):
+		if user_id:
+			users = User.query()
+			for user in users:
+				if user.id == user_id:
+					curr_user = user
+					curr_user.key.delete()
+					self.response.write("Deleted")
+
+
 
 allowed_methods = webapp2.WSGIApplication.allowed_methods
 new_allowed_methods = allowed_methods.union(('PATCH',))
