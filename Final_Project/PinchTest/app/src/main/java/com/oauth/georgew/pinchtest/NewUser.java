@@ -151,15 +151,14 @@ public class NewUser extends AppCompatActivity {
                     Log.d(TAG, response.toString());
                     Log.d(TAG, responseStr);
                     Intent menu = new Intent(getApplicationContext(), Menu.class);
-                    menu.putExtra("last_name", last_name);
-                    menu.putExtra("first_name", first_name);
-                    menu.putExtra("gender", gender);
                     menu.putExtra("user_id", user_id);
-                    menu.putExtra("email", email);
-                    menu.putExtra("age", age);
-                    menu.putExtra("height", height);
                     startActivity(menu);
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Common.makeToast("User Added", getApplicationContext());
+                        }
+                    });
                 } else {
                     Log.d(TAG, "BLEW IT " + response.toString());
                 }

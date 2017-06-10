@@ -103,6 +103,7 @@ public class Circumference extends AppCompatActivity {
                 String json = "{'neck_circ': '" + neck + "', 'chest_circ': '" + chest + "', 'upper_arm_circ': '" + upper_arm + "', " +
                         "'fore_arm_circ': '" + fore_arm + "', 'waist_circ': '" + waist + "', 'hip_circ': '" + hips + "', 'thigh_circ': '" + thigh + "', 'calf_circ': '" + calf + "'}";
                 makePostRequest("https://bodyfatpinchtest.appspot.com/measurements/" + user_id, json);
+                Common.makeToast("Circumference Added", getApplicationContext());
                 finish();
             }
         });

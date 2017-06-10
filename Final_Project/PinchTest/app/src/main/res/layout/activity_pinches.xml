@@ -183,6 +183,6 @@
             android:textAllCaps="true"
             android:textSize="15dp"
             android:layout_weight="1"
-            android:text="@string/back_button"/>
+            android:text="@string/main"/>
     </LinearLayout>
 </LinearLayout>

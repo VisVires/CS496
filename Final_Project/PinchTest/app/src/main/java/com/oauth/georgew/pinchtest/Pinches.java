@@ -114,6 +114,7 @@ public class Pinches extends AppCompatActivity {
 
                 String json = "{'bicep': '" + bicep + "', 'tricep': '" + tricep + "', 'subscapular': '" + subscap + "', 'suprailiac': '" + suprailiac + "', 'weight': '" + weight + "'}";
                 makePostRequest("https://bodyfatpinchtest.appspot.com/pinchtest/" + user_id, json);
+                Common.makeToast("Body Fat Added", getApplicationContext());
             }
         });
 
@@ -122,7 +123,9 @@ public class Pinches extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent menu = new Intent(getApplicationContext(), Menu.class);
+                menu.putExtra("user_id", user_id);
+                startActivity(menu);
             }
         });
     }

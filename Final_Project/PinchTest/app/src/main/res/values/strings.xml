@@ -28,6 +28,7 @@
     <string name="get_started">Get Current Stats</string>
     <string name="circum_button">Add Circumference Measurements</string>
     <string name="new_user_button">Input User Data</string>
+    <string name="main">Back to Main</string>
     <string name="CLIENT_ID">57051147513-fnfoo9582m7rq2uef58kmtkn5ltm4pfu.apps.googleusercontent.com</string>
     <string name="API_KEY">AIzaSyCcF487gp7YyxioCyWMx0UNL5O4OIrteto</string>
     <string name="na">N/A</string>

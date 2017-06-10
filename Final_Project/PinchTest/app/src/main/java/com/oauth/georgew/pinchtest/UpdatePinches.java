@@ -86,7 +86,9 @@ public class UpdatePinches extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent menu = new Intent(getApplicationContext(), Menu.class);
+                menu.putExtra("user_id", user_id);
+                startActivity(menu);
             }
         });
 
@@ -97,6 +99,7 @@ public class UpdatePinches extends AppCompatActivity {
                 String pinch = (String) obj.get("pinch_id");
                 Intent editPinches = new Intent(getApplicationContext(), PinchEdits.class);
                 editPinches.putExtra("pinch_id", pinch);
+                editPinches.putExtra("user_id", user_id);
                 startActivity(editPinches);
             }
         });
@@ -119,11 +122,11 @@ public class UpdatePinches extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String resp = response.body().string();
-                Log.d(TAG, resp);
+                //Log.d(TAG, resp);
                 try {
                     JSONObject jsonObject = new JSONObject(resp);
                     JSONArray pinchArray = jsonObject.getJSONArray("pinches");
-                    Log.d(TAG, pinchArray.toString());
+                    //Log.d(TAG, pinchArray.toString());
                     List<Map<String, String>> pinches = new ArrayList<Map<String, String>>();
                     for (int i = 0; i < pinchArray.length(); i++) {
                         HashMap<String, String> myMap = new HashMap<String, String>();

@@ -37,13 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="10dp"
-            android:text="@string/weight"
-            android:textAlignment="center"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="10dp"
             android:text="@string/bicep"
             android:textAlignment="center"/>
         <TextView
@@ -66,6 +59,13 @@
             android:layout_weight="1"
             android:textSize="10dp"
             android:text="@string/suprailiac"
+            android:textAlignment="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="10dp"
+            android:text="@string/bodyfat"
             android:textAlignment="center"/>
     </LinearLayout>
     <ListView

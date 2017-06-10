@@ -7,6 +7,7 @@ import math
 
 
 class Measurement(ndb.Model):
+	measure_id = ndb.StringProperty()
 	measurement_date = ndb.StringProperty()
 	neck_circ = ndb.FloatProperty()
 	chest_circ = ndb.FloatProperty()
@@ -22,17 +23,17 @@ class Pinches(ndb.Model):
 	body_fat_measure = ndb.FloatProperty()
 	body_density_measure = ndb.FloatProperty()
 	pinch_test_date = ndb.StringProperty()
-	number = ndb.IntegerProperty()
-	chest_pinch = ndb.FloatProperty()
 	bicep_pinch = ndb.FloatProperty()
 	tricep_pinch = ndb.FloatProperty()
-	abdominal_pinch = ndb.FloatProperty()
-	thigh_pinch = ndb.FloatProperty()
 	suprailiac_pinch = ndb.FloatProperty()
 	subscapular_pinch = ndb.FloatProperty()
-	midaxillary_pinch = ndb.FloatProperty()
-	lower_back_pinch = ndb.FloatProperty()
-	supraspinale_pinch = ndb.FloatProperty()
+	#midaxillary_pinch = ndb.FloatProperty()
+	#lower_back_pinch = ndb.FloatProperty()
+	#upraspinale_pinch = ndb.FloatProperty()
+	#abdominal_pinch = ndb.FloatProperty()
+	#thigh_pinch = ndb.FloatProperty()
+	#number = ndb.IntegerProperty()
+	#chest_pinch = ndb.FloatProperty()
 
 class User(ndb.Model):
 	id = ndb.StringProperty()
@@ -73,6 +74,8 @@ class Measurement_Handler(webapp2.RequestHandler):
 						new_measurement.thigh_circ = float(measurement_data['thigh_circ'])
 					if measurement_data.get('calf_circ'):
 						new_measurement.calf_circ = float(measurement_data['calf_circ'])
+					new_measurement.put()
+					new_measurement.measure_id = new_measurement.key.urlsafe()
 					new_measurement.put()
 					curr_user.measurements.append(new_measurement)
 					curr_user.put()
@@ -166,11 +169,44 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			curr_user_dict = curr_user.to_dict()
 			self.response.write(json.dumps(curr_user_dict))
 
-	def get(self, id=None):
-		if id:
+	def get(self, pinch_id=None):
+		if pinch_id:
 			pinch = ndb.Key(urlsafe=pinch_id).get()
 			pinch_dict = pinch.to_dict()
-			self.response.write(pinch_dict)
+			self.response.write(json.dumps(pinch_dict))
+
+	def put(self, pinch_id=None):
+		pinch_data = ast.literal_eval(self.request.body)
+		if pinch_data.get('user'):
+			if pinch_id:
+				pinch = ndb.Key(urlsafe=pinch_id).get()
+				bicep = float(pinch_data['bicep'])
+				pinch.bicep_pinch = bicep
+				tricep = float(pinch_data['tricep'])
+				pinch.tricep_pinch = tricep
+				subscapular = float(pinch_data['subscapular'])
+				pinch.subscapular_pinch = subscapular
+				suprailiac = float(pinch_data['suprailiac'])
+				pinch.suprailiac_pinch = suprailiac 
+				pinch_sum = findLogSum(bicep, tricep, subscapular ,suprailiac)
+				male = curr_user.male
+				user_age = curr_user.age
+				density = findBodyDensity(pinch_sum, user_age, male)
+				pinch.body_density_measure = density
+				body_fat = siriEquation(density)
+				pinch.body_fat_measure = body_fat
+				pinch.put()
+				#find associated user to pinches
+				users = User.query()
+				for user in users:
+					if user.id == pinch_data['user']:
+						curr_user = user
+						for curr_pinch in curr_user.pinches:
+							if pinch_id == pinch.pinch_id:
+								curr_user.pinches.remove(curr_pinch)
+								curr_user.pinches.append(pinch) 
+				pinch_dict = pinch.to_dict()
+				self.response.write(json.dumps(pinch_dict))
 
 	
 
@@ -245,8 +281,19 @@ class UserHandler(webapp2.RequestHandler):
 			for user in users:
 				if user.id == user_id:
 					curr_user = user
+					pinches = Pinches.query()
+					for pinch in pinches:
+						for curr_pinch in curr_user.pinches:
+							if curr_pinch.pinch_id == pinch.pinch_id:
+								pinch.key.delete()
+					measurements = Measurement.query()
+					for measurement in measurements:
+						for curr_measure in curr_user.measurements:
+							if 	curr_measure.measure_id == measurement.measure_id:
+								measurement.key.delete()
+								self.response.write("Deleted Measurement")
 					curr_user.key.delete()
-					self.response.write("Deleted")
+					self.response.write("Deleted User")
 
 
 

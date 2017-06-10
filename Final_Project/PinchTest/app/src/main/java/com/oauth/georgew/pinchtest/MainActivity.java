@@ -54,34 +54,6 @@ public class MainActivity extends AppCompatActivity {
     String gender, user_id, first_name, last_name, email;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    /*@Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.update_user: {
-                Intent update_user = new Intent(getApplicationContext(), UpdateUserInfo.class);
-                startActivity(update_user);
-                return true;
-            }
-            case R.id.action_sign_out: {
-                Common.logOut(this);
-                this.finishAffinity();
-                return true;
-            }
-            case R.id.delete_profile: {
-                Toast.makeText(this, "Delete Profile", Toast.LENGTH_SHORT).show();
-                deleteUser(user_id, this);
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
                 //set up test
                 if (response.isSuccessful()) {
                     responseStr = response.body().string();
-                    Log.d(TAG, response.toString());
-                    Log.d(TAG, responseStr);
+                    //Log.d(TAG, response.toString());
+                    //Log.d(TAG, responseStr);
                     if (responseStr.equals("User already exists")){
-                        Log.d(TAG, "move to menu");
+                        //Log.d(TAG, "move to menu");
                         Intent menu = new Intent(getApplicationContext(), Menu.class);
                         menu.putExtra("first_name", first_name);
                         menu.putExtra("last_name", last_name);
@@ -142,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         menu.putExtra("gender", gender);
                         startActivity(menu);
                     } else {
-                        Log.d(TAG, "move to edit user data");
+                        //Log.d(TAG, "move to edit user data");
                         Intent new_user = new Intent(getApplicationContext(), NewUser.class);
                         new_user.putExtra("first_name", first_name);
                         new_user.putExtra("last_name", last_name);
