@@ -93,10 +93,10 @@ public class UpdateUserInfo extends AppCompatActivity {
                 height = update_height.getText().toString();
                 updateUserInDatastore("https://bodyfatpinchtest.appspot.com/user", "{'first_name': '" + first_name + "', 'last_name': '" + last_name + "', 'email': '" + email_input + "', " +
                         "'user': '" + user_id + "', 'age': '" + age + "', 'height': '" + height + "'}");
-                Intent menu = new Intent(getApplicationContext(), Menu.class);
-                menu.putExtra("user_id", user_id);
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                main.putExtra("user_id", user_id);
                 Common.makeToast("Information Updated", getApplicationContext());
-                startActivity(menu);
+                startActivity(main);
             }
         });
 
