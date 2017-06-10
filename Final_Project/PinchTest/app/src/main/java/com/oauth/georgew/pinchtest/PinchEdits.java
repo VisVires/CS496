@@ -104,7 +104,9 @@ public class PinchEdits extends AppCompatActivity {
         back_to_update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                 Intent menu = new Intent(getApplicationContext(), Menu.class);
+                 menu.putExtra("user_id", user_id);
+                 startActivity(menu);
             }
         });
 
@@ -119,9 +121,9 @@ public class PinchEdits extends AppCompatActivity {
                         "{'user': '" + user_id + "', 'bicep': '" + bicep_input + "', 'tricep': '" + tricep_input + "', 'subscapular': '" + subscap_input + "', " +
                         "'suprailiac': '" + suprailiac_input + "'}");
                 Common.makeToast("Data Updated", getApplicationContext());
-                Intent update = new Intent(getApplicationContext(), UpdatePinches.class);
-                update.putExtra("user_id", user_id);
-                startActivity(update);
+               Intent menu = new Intent(getApplicationContext(), Menu.class);
+               menu.putExtra("user_id", user_id);
+               startActivity(menu);
             }
         });
 

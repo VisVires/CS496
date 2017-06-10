@@ -179,34 +179,35 @@ class PinchTest_Handler(webapp2.RequestHandler):
 		pinch_data = ast.literal_eval(self.request.body)
 		if pinch_data.get('user'):
 			if pinch_id:
-				pinch = ndb.Key(urlsafe=pinch_id).get()
-				bicep = float(pinch_data['bicep'])
-				pinch.bicep_pinch = bicep
-				tricep = float(pinch_data['tricep'])
-				pinch.tricep_pinch = tricep
-				subscapular = float(pinch_data['subscapular'])
-				pinch.subscapular_pinch = subscapular
-				suprailiac = float(pinch_data['suprailiac'])
-				pinch.suprailiac_pinch = suprailiac 
-				pinch_sum = findLogSum(bicep, tricep, subscapular ,suprailiac)
-				male = curr_user.male
-				user_age = curr_user.age
-				density = findBodyDensity(pinch_sum, user_age, male)
-				pinch.body_density_measure = density
-				body_fat = siriEquation(density)
-				pinch.body_fat_measure = body_fat
-				pinch.put()
-				#find associated user to pinches
 				users = User.query()
 				for user in users:
 					if user.id == pinch_data['user']:
 						curr_user = user
+						pinch = ndb.Key(urlsafe=pinch_id).get()
+						bicep = float(pinch_data['bicep'])
+						pinch.bicep_pinch = bicep
+						tricep = float(pinch_data['tricep'])
+						pinch.tricep_pinch = tricep
+						subscapular = float(pinch_data['subscapular'])
+						pinch.subscapular_pinch = subscapular
+						suprailiac = float(pinch_data['suprailiac'])
+						pinch.suprailiac_pinch = suprailiac 
+						pinch_sum = findLogSum(bicep, tricep, subscapular ,suprailiac)
+						male = curr_user.male
+						user_age = curr_user.age
+						density = findBodyDensity(pinch_sum, user_age, male)
+						pinch.body_density_measure = density
+						body_fat = siriEquation(density)
+						pinch.body_fat_measure = body_fat
+						pinch.put()
+						#find associated user to pinches
 						for curr_pinch in curr_user.pinches:
 							if pinch_id == pinch.pinch_id:
 								curr_user.pinches.remove(curr_pinch)
-								curr_user.pinches.append(pinch) 
-				pinch_dict = pinch.to_dict()
-				self.response.write(json.dumps(pinch_dict))
+								curr_user.pinches.append(pinch)
+						curr_user.put() 
+						pinch_dict = pinch.to_dict()
+						self.response.write(json.dumps(pinch_dict))
 
 	
 
