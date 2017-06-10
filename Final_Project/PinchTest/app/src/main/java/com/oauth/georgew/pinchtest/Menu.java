@@ -46,6 +46,7 @@ public class Menu extends AppCompatActivity {
     TextView greeting, test, age_output, height_output, weight_output, body_fat_output, bmi_output;
     String gender, user_id, first_name, last_name, age, height;
     int height_in_inches;
+    boolean bodyfat_exists;
     Double weight, bodyFat, bodyDensity;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -117,6 +118,9 @@ public class Menu extends AppCompatActivity {
 
         //set up update body fat button
         updateBodyFat = (Button) findViewById(R.id.mod_button);
+        if (bodyfat_exists){
+            updateBodyFat.setEnabled(true);
+        }
         updateBodyFat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +134,7 @@ public class Menu extends AppCompatActivity {
 
     @Override
     protected void onStart(){
+
         makeGetRequest("https://bodyfatpinchtest.appspot.com/user/" + user_id);
         super.onStart();
     }
@@ -181,18 +186,21 @@ public class Menu extends AppCompatActivity {
                                 //set up body fat
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");
                                 if(pinches.length() > 0) {
+                                    bodyfat_exists = true;
                                     bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
                                     bodyDensity = pinches.getJSONObject(pinches.length()-1).getDouble("body_density_measure");
                                     bodyFat = Common.round(bodyFat,2);
-                                    body_fat_output.setText(bodyFat.toString());
+                                    body_fat_output.setText(bodyFat.toString() + "%");
                                     bodyDensity = Common.round(bodyDensity,2);
+                                } else {
+                                    updateBodyFat.setEnabled(false);
                                 }
 
                                 //set up weight
                                 JSONArray weightArray = jsonObject.getJSONArray("weight");
                                 if (weightArray.length() > 0) {
                                     weight = weightArray.getDouble(weightArray.length()-1);
-                                    weight_output.setText(weight.toString());
+                                    weight_output.setText(weight.toString() + " lbs");
                                     Double bmi = Common.calcBMI(height_in_inches, weight);
                                     bmi_output.setText(bmi.toString());
                                 }

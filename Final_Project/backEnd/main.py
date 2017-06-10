@@ -7,7 +7,6 @@ import math
 
 
 class Measurement(ndb.Model):
-	id = ndb.StringProperty()
 	measurement_date = ndb.StringProperty()
 	neck_circ = ndb.FloatProperty()
 	chest_circ = ndb.FloatProperty()
@@ -19,7 +18,7 @@ class Measurement(ndb.Model):
 	calf_circ = ndb.FloatProperty()
 
 class Pinches(ndb.Model):
-	id = ndb.StringProperty() 
+	pinch_id = ndb.StringProperty() 
 	body_fat_measure = ndb.FloatProperty()
 	body_density_measure = ndb.FloatProperty()
 	pinch_test_date = ndb.StringProperty()
@@ -160,19 +159,18 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			body_fat = siriEquation(density)
 			new_pinches.body_fat_measure = body_fat
 			new_pinches.put()
+			new_pinches.pinch_id = new_pinches.key.urlsafe()
+			new_pinches.put()
 			curr_user.pinches.append(new_pinches)
 			curr_user.put()
 			curr_user_dict = curr_user.to_dict()
 			self.response.write(json.dumps(curr_user_dict))
 
-	def get(self, user_id):
-		if user_id:
-			users = User.query()
-			for user in users:
-				if user.id == user_id:
-					curr_user = user
-					curr_user_pinches = curr_user.pinches[0].to_dict()
-					self.response.write(json.dumps(curr_user_pinches))
+	def get(self, id=None):
+		if id:
+			pinch = ndb.Key(urlsafe=pinch_id).get()
+			pinch_dict = pinch.to_dict()
+			self.response.write(pinch_dict)
 
 	
 
@@ -216,9 +214,9 @@ class UserHandler(webapp2.RequestHandler):
 					else:
 						new_user.male = False
 				else:
-					new_user.male = user.male;
-				new_user.weight = user.weight;
-				new_user.pinches = user.pinches;
+					new_user.male = user.male
+				new_user.weight = user.weight
+				new_user.pinches = user.pinches
 				new_user.measurements = user.measurements;
 				new_user.first_name = user_data['first_name']
 				new_user.last_name = user_data['last_name']

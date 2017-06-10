@@ -31,7 +31,7 @@ public class Circumference extends AppCompatActivity {
     OkHttpClient client;
     EditText neck_input, chest_input, upper_arm_input, fore_arm_input, waist_input, hips_input, thigh_input, calf_input;
     String neck, chest, upper_arm, fore_arm, waist, hips, thigh, calf;
-    Button add_measurements_button;
+    Button add_measurements_button, back_button;
     String user_id, responseStr;
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -107,6 +107,13 @@ public class Circumference extends AppCompatActivity {
             }
         });
 
+        back_button = (Button) findViewById(R.id.circ_back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void makeGetRequest(String url) {

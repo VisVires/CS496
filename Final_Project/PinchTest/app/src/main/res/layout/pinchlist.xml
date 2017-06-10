@@ -1,89 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.oauth.georgew.pinchtest.UpdatePinches">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:text="@string/select"/>
+    android:scrollbars="vertical"
+    android:id="@+id/pinches_item">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="6">
         <TextView
+            android:id="@+id/pinch_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/dates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/date"
-            android:textSize="10dp"
+            android:textSize="12dp"
             android:textAlignment="center"/>
         <TextView
+            android:id="@+id/biceps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="10dp"
-            android:text="@string/weight"
-            android:textAlignment="center"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="10dp"
+            android:textSize="15dp"
             android:text="@string/bicep"
             android:textAlignment="center"/>
         <TextView
+            android:id="@+id/triceps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10dp"
+            android:textSize="15dp"
             android:layout_weight="1"
             android:text="@string/tricep"
             android:textAlignment="center"/>
         <TextView
+            android:id="@+id/subscaps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="10dp"
+            android:textSize="15dp"
             android:text="@string/subscapular"
             android:textAlignment="center"/>
         <TextView
+            android:id="@+id/suprailiacs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="10dp"
+            android:textSize="15dp"
             android:text="@string/suprailiac"
             android:textAlignment="center"/>
-    </LinearLayout>
-    <ListView
-        android:id="@+id/pinch_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="center|bottom"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/update_pinches_back_button"
+        <TextView
+            android:id="@+id/bodyfats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/back_button"/>
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:text="@string/bodyfat"
+            android:textAlignment="center"/>
     </LinearLayout>
 </LinearLayout>
-
