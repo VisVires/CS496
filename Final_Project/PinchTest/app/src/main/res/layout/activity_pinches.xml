@@ -33,6 +33,7 @@
             android:textAlignment="center"/>
         <EditText
             android:id="@+id/weight_input"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -50,6 +51,7 @@
             android:textAlignment="center"/>
         <EditText
             android:id="@+id/bicep_pinch_input"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -67,6 +69,7 @@
             android:textAlignment="center"/>
         <EditText
             android:id="@+id/tricep_pinch_input"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -85,6 +88,7 @@
         <EditText
             android:id="@+id/subscap_pinch_input"
             android:layout_width="match_parent"
+            android:inputType="numberDecimal"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>
@@ -101,6 +105,7 @@
             android:textAlignment="center"/>
         <EditText
             android:id="@+id/suprailiac_pinch_input"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>

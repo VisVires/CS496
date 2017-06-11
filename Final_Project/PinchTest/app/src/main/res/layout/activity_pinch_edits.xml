@@ -47,6 +47,7 @@
             android:text="@string/bicep"/>
         <EditText
             android:id="@+id/bicep_edit"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,6 +67,7 @@
             android:text="@string/tricep"/>
         <EditText
             android:id="@+id/tricep_edit"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -85,6 +87,7 @@
             android:text="@string/subscapular"/>
         <EditText
             android:id="@+id/subscap_edit"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -104,6 +107,7 @@
             android:text="@string/suprailiac"/>
         <EditText
             android:id="@+id/suprailiac_edit"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

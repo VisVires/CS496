@@ -72,12 +72,14 @@ public class Circumference extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circumference);
-
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        //get user_id
         user_id = getIntent().getStringExtra("user_id");
 
+        //set up edit text fields
         neck_input = (EditText) findViewById(R.id.neck_input);
         chest_input = (EditText) findViewById(R.id.chest_input);
         upper_arm_input = (EditText) findViewById(R.id.upperarm_input);
@@ -86,8 +88,11 @@ public class Circumference extends AppCompatActivity {
         hips_input = (EditText) findViewById(R.id.hips_input);
         thigh_input = (EditText) findViewById(R.id.thigh_input);
         calf_input = (EditText) findViewById(R.id.calf_input);
+
+        //set up button
         add_measurements_button = (Button) findViewById(R.id.calc_circum_button);
 
+        //get text from text fields and post to user
         add_measurements_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +112,7 @@ public class Circumference extends AppCompatActivity {
                 finish();
             }
         });
-
+        //set up back button
         back_button = (Button) findViewById(R.id.circ_back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,39 +122,7 @@ public class Circumference extends AppCompatActivity {
         });
     }
 
-    public void makeGetRequest(String url) {
-
-        client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(TAG, "FAILURE REQUEST");
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String resp = response.body().string();
-                //set up test
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            JSONObject jsonObject = new JSONObject(resp);
-                            Log.d(TAG, resp);
-                        } catch (JSONException je){
-                            je.printStackTrace();
-                        }
-                    }
-                });
-            }
-        });
-    }
-
+    //post user measurement data to user
     public void makePostRequest(String url, String json){
         client = new OkHttpClient();
         //build url

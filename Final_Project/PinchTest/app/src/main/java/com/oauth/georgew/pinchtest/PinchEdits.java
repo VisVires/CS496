@@ -32,7 +32,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.oauth.georgew.pinchtest.UpdateUserInfo.user_id;
 
 public class PinchEdits extends AppCompatActivity {
 
@@ -45,13 +44,14 @@ public class PinchEdits extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-
+    //set up overflow menu
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    //set up options menu properly
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -80,6 +80,7 @@ public class PinchEdits extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pinch_edits);
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -88,19 +89,25 @@ public class PinchEdits extends AppCompatActivity {
         back_to_update_button = (Button) findViewById(R.id.pinch_edit_back_button);
         edit_button = (Button) findViewById(R.id.update_body_fat_button);
 
+        //get pinch id
         pinch_id = getIntent().getStringExtra("pinch_id");
+        //set up all edit texts
         setUpEditTexts();
 
+        //get pinches and place them in selectable, scrollable list
         getPinches();
         //Log.d(TAG, pinch_id);
 
+        //turn off edit button
         edit_button.setEnabled(false);
 
+        //make it so edit button is not active until all items are filled out
         bicep.addTextChangedListener(textWatcher);
         tricep.addTextChangedListener(textWatcher);
         subscap.addTextChangedListener(textWatcher);
         suprailiac.addTextChangedListener(textWatcher);
 
+        //go back to menu or main screen
         back_to_update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +117,7 @@ public class PinchEdits extends AppCompatActivity {
             }
         });
 
+        //get information from edit text fields then add to json to make put request to pinch field then update and move to menu
         edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,9 +134,9 @@ public class PinchEdits extends AppCompatActivity {
                startActivity(menu);
             }
         });
-
     }
 
+    //watch edit text fields to ensure they are properly filled out
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -147,6 +155,7 @@ public class PinchEdits extends AppCompatActivity {
         }
     };
 
+    //get pinches to fill out edittext fields
     private void getPinches(){
         client = new OkHttpClient();
         String url = "https://bodyfatpinchtest.appspot.com/pinchtest/" + pinch_id;
@@ -159,6 +168,7 @@ public class PinchEdits extends AppCompatActivity {
                 Log.d(TAG, "FAILURE REQUEST 1");
                 e.printStackTrace();
             }
+            //set up edit text fields
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String resp = response.body().string();
@@ -187,6 +197,7 @@ public class PinchEdits extends AppCompatActivity {
         });
     }
 
+    //make put request to update pinches for user
     public void updatePinchInDatastore(String url, String json){
 
         client = new OkHttpClient();
@@ -218,7 +229,7 @@ public class PinchEdits extends AppCompatActivity {
     }
 
 
-
+    //set up edit text fields
     private void setUpEditTexts(){
         date = (TextView)findViewById(R.id.date);
         bicep = (EditText)findViewById(R.id.bicep_edit);

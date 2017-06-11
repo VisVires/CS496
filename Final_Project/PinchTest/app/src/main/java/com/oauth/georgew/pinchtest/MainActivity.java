@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         authorizationService = new AuthorizationService(this);
 
         get_started = (Button) findViewById(R.id.get_started);
+        //make original get request for oauth
         get_started.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     String responseStr;
 
-
+    //make post to create account
     public void postUserInfoToApi(){
         client = new OkHttpClient();
         final String url = "https://bodyfatpinchtest.appspot.com";
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    //make oauth request
     public void makeGetRequestToGoogle() {
         try {
             authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
@@ -186,36 +188,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    //check for auth
     @Override
     protected void onStart(){
         authState = getOrCreateAuthState();
         super.onStart();
     }
 
-    public void deleteUser(String user, final Context context) {
-        OkHttpClient client = new OkHttpClient();
-        String url = "https://bodyfatpinchtest.appspot.com/user/" + user;
-        Request request = new Request.Builder()
-                .url(url)
-                .delete()
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(TAG, "FAILURE REQUEST 1");
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String resp = response.body().string();
-                Log.d(TAG, resp);
-
-            }
-        });
-    }
-
+    //check and get auth state
     AuthState getOrCreateAuthState(){
         AuthState auth = null;
         SharedPreferences authorizationPreference = getSharedPreferences("auth", MODE_PRIVATE);
@@ -240,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //if auth state needs to be created then set it up with the profile, email and openid permissions in oauth
     void createAuthState(){
         Uri authEndPoint = new Uri.Builder().scheme("https").authority("accounts.google.com").path("o/oauth2/v2/auth").build();
         Uri tokenEndPoint = new Uri.Builder().scheme("https").authority("www.googleapis.com").path("/oauth2/v4/token").build();

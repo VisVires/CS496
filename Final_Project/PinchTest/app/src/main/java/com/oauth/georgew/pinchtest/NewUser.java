@@ -124,6 +124,7 @@ public class NewUser extends AppCompatActivity {
         }
     };
 
+    //make put request to add the age and height to the new user
     public void putNewUserInDatastore(){
 
         client = new OkHttpClient();

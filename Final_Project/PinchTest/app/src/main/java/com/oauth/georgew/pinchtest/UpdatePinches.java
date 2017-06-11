@@ -38,12 +38,14 @@ public class UpdatePinches extends AppCompatActivity {
     ListView pinch_list;
     private static final String TAG = UpdatePinches.class.getSimpleName();
 
+    //build menu
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    //add options to overflow menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -72,17 +74,19 @@ public class UpdatePinches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_pinches);
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         user_id = getIntent().getStringExtra("user_id");
 
-
         back_button = (Button) findViewById(R.id.update_pinches_back_button);
         pinch_list = (ListView) findViewById(R.id.pinch_list);
 
+        //get list of pinches
         getPinches();
 
+        //go back to main screen
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +96,7 @@ public class UpdatePinches extends AppCompatActivity {
             }
         });
 
+        //set up on click listener for individual items in the list
         pinch_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,6 +111,7 @@ public class UpdatePinches extends AppCompatActivity {
 
     }
 
+    //get pinch list and populate list with measurements
     private void getPinches(){
         client = new OkHttpClient();
         String url = "https://bodyfatpinchtest.appspot.com/user/" + user_id;
@@ -128,6 +134,7 @@ public class UpdatePinches extends AppCompatActivity {
                     JSONArray pinchArray = jsonObject.getJSONArray("pinches");
                     //Log.d(TAG, pinchArray.toString());
                     List<Map<String, String>> pinches = new ArrayList<Map<String, String>>();
+                    //set up list items
                     for (int i = 0; i < pinchArray.length(); i++) {
                         HashMap<String, String> myMap = new HashMap<String, String>();
                         myMap.put("pinch_id", pinchArray.getJSONObject(i).getString("pinch_id"));
@@ -140,12 +147,14 @@ public class UpdatePinches extends AppCompatActivity {
                         myMap.put("bfat", Common.round(bfat,2).toString());
                         pinches.add(myMap);
                     }
+                    //fill in adapter
                     final SimpleAdapter pinchAdapter = new SimpleAdapter(
                             UpdatePinches.this,
                             pinches,
                             R.layout.pinchlist,
                             new String[]{"pinch_id", "date", "bicep", "tricep", "subscap", "supra", "bfat"},
                             new int[]{R.id.pinch_id, R.id.dates, R.id.biceps, R.id.triceps, R.id.subscaps, R.id.suprailiacs, R.id.bodyfats});
+                    //populate adapter
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

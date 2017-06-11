@@ -41,13 +41,14 @@ public class Pinches extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-
+    //set up menu
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    //set up menu items and make clickable
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -79,6 +80,7 @@ public class Pinches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pinches);
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -101,7 +103,7 @@ public class Pinches extends AppCompatActivity {
         subscap_input.addTextChangedListener(textWatcher);
         suprailiac_input.addTextChangedListener(textWatcher);
 
-
+        //add body fat measurement using POST and edittext field elements
         updateBodyFat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +122,7 @@ public class Pinches extends AppCompatActivity {
 
         back = (Button)findViewById(R.id.back_button);
 
+        //go back to main menu
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +133,7 @@ public class Pinches extends AppCompatActivity {
         });
     }
 
+    //create text watcher items to see if all fields are filled out
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -148,6 +152,7 @@ public class Pinches extends AppCompatActivity {
         }
     };
 
+    //post new pinches to user item and create new pinch entity
     public void makePostRequest(String url, final String json){
         client = new OkHttpClient();
         //build url
@@ -172,14 +177,14 @@ public class Pinches extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-
+                                //set up all textviews
                                 setTextViews();
-
+                                //
                                 JSONObject jsonObject = new JSONObject(responseStr);
                                 JSONArray weightArray = jsonObject.getJSONArray("weight");
                                 weight_output = weightArray.getDouble(weightArray.length() - 1);
                                 JSONArray pinches = jsonObject.getJSONArray("pinches");
-
+                                //post all text to new textviews
                                 if (pinches.length() > 0) {
                                     Double bodyFat = pinches.getJSONObject(pinches.length()-1).getDouble("body_fat_measure");
                                     bodyFatOutput.setText(Common.round(bodyFat, 2).toString()+ " %");
@@ -199,6 +204,7 @@ public class Pinches extends AppCompatActivity {
         });
     }
 
+    //set up all text views for use for uncoming variables
     private void setTextViews(){
         //set up textviews
         bodyFatText = (TextView)findViewById(R.id.body_fat_text);

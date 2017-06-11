@@ -29,7 +29,7 @@ import static android.content.ContentValues.TAG;
 
 public class UpdateUserInfo extends AppCompatActivity {
 
-    static String user_id;
+    String user_id;
     String first_name, last_name, responseStr, age, height, email_input;
     boolean gender;
     JSONArray pinches, measurements, weight;
@@ -40,12 +40,14 @@ public class UpdateUserInfo extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
+    //set up create menu
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    //set up items in overflow list
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -74,17 +76,19 @@ public class UpdateUserInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user_info);
+        //set up toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         user_id = getIntent().getStringExtra("user_id");
         Log.d(TAG, user_id);
-
+        //get original user email, height and age and display them
         getUserInfo();
 
         edit_info = (Button) findViewById(R.id.edit_info);
         back_button = (Button) findViewById(R.id.update_user_back_button);
 
+        //update email height and age info
         edit_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +104,7 @@ public class UpdateUserInfo extends AppCompatActivity {
             }
         });
 
+        //go back to previous screen
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +113,7 @@ public class UpdateUserInfo extends AppCompatActivity {
         });
     }
 
+    //set up UI with custom fields for edit text
     public void getUserInfo() {
         client = new OkHttpClient();
         String url = "https://bodyfatpinchtest.appspot.com/user/" + user_id;
@@ -149,6 +155,7 @@ public class UpdateUserInfo extends AppCompatActivity {
         });
     }
 
+    //make put request to update users info
     public void updateUserInDatastore(String url, String json){
 
         client = new OkHttpClient();
@@ -178,6 +185,7 @@ public class UpdateUserInfo extends AppCompatActivity {
         });
     }
 
+    //get edit text views set up
     private void setEditTextViews(){
         update_age = (EditText)findViewById(R.id.update_age);
         update_height = (EditText) findViewById(R.id.update_height);

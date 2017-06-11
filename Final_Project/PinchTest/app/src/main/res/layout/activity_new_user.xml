@@ -33,6 +33,7 @@ tools:context="com.oauth.georgew.pinchtest.NewUser">
             android:textAlignment="center"/>
         <EditText
             android:id="@+id/age_input"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -51,6 +52,7 @@ tools:context="com.oauth.georgew.pinchtest.NewUser">
         <EditText
             android:id="@+id/height_input"
             android:layout_width="match_parent"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>

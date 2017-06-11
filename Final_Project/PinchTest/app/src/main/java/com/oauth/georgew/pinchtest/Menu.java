@@ -52,12 +52,14 @@ public class Menu extends AppCompatActivity {
             = MediaType.parse("application/json; charset=utf-8");
 
 
+    //create a menu for overflow
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    //set onclick items for overflow menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -88,13 +90,14 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        //set up toolbar menu
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         greeting = (TextView) findViewById(R.id.greeting);
         user_id = getIntent().getStringExtra("user_id");
 
-        //set up circumference button
+        //set up circumference button to go to measurements activity
         circumButton = (Button) findViewById(R.id.circum_button);
         circumButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +108,7 @@ public class Menu extends AppCompatActivity {
             }
         });
 
-        //set up body fat button
+        //set up body fat button to go to add body fat activity
         bodyFatButton = (Button) findViewById(R.id.calc_button);
         bodyFatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,11 +119,13 @@ public class Menu extends AppCompatActivity {
             }
         });
 
-        //set up update body fat button
+        //set up update body fat button only available if bodyfat exists
         updateBodyFat = (Button) findViewById(R.id.mod_button);
         if (bodyfat_exists){
             updateBodyFat.setEnabled(true);
         }
+
+        //set up click listener to go to update pinches page
         updateBodyFat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,15 +137,15 @@ public class Menu extends AppCompatActivity {
     }
 
 
+    //make get request
     @Override
     protected void onStart(){
-
         makeGetRequest("https://bodyfatpinchtest.appspot.com/user/" + user_id);
         super.onStart();
     }
 
+    //make original get request to user
     public void makeGetRequest(String url) {
-
         client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -217,8 +222,8 @@ public class Menu extends AppCompatActivity {
         });
     }
 
+    //set up all text views
     private void setUpTextViews(){
-        //set up text views
         age_output = (TextView) findViewById(R.id.age);
         height_output = (TextView) findViewById(R.id.height);
         weight_output = (TextView) findViewById(R.id.weight);

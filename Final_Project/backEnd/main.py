@@ -6,6 +6,7 @@ import json
 import math
 
 
+#set up measurement class
 class Measurement(ndb.Model):
 	measure_id = ndb.StringProperty()
 	measurement_date = ndb.StringProperty()
@@ -18,6 +19,7 @@ class Measurement(ndb.Model):
 	thigh_circ = ndb.FloatProperty()
 	calf_circ = ndb.FloatProperty()
 
+#set up pinches class
 class Pinches(ndb.Model):
 	pinch_id = ndb.StringProperty() 
 	body_fat_measure = ndb.FloatProperty()
@@ -35,6 +37,7 @@ class Pinches(ndb.Model):
 	#number = ndb.IntegerProperty()
 	#chest_pinch = ndb.FloatProperty()
 
+#set up user class
 class User(ndb.Model):
 	id = ndb.StringProperty()
 	first_name = ndb.StringProperty()
@@ -47,6 +50,7 @@ class User(ndb.Model):
 	measurements = ndb.StructuredProperty(Measurement, repeated=True)
 	pinches = ndb.StructuredProperty(Pinches, repeated=True)
 
+#set up measurement handler
 class Measurement_Handler(webapp2.RequestHandler):
 	#add new set of measurments
 	def post(self, user_id):
@@ -83,7 +87,7 @@ class Measurement_Handler(webapp2.RequestHandler):
 					self.response.write(json.dumps(user_dict))
 		
 			
-	
+	#get latest measurements
 	def get(self, user_id=None):
 		if user_id:
 			users = User.query()
@@ -93,16 +97,18 @@ class Measurement_Handler(webapp2.RequestHandler):
 					curr_user_measurements = curr_user.measurements[0].to_dict()
 					self.response.write(json.dumps(curr_user_measurements))
 
-
+#set up pinchtest handler
 class PinchTest_Handler(webapp2.RequestHandler):
 	
 	global findLogSum
 	global findBodyDensity
 	global siriEquation
-
+	
+	#get log sum of pinches
 	def findLogSum(bicep, tricep, subscapular, suprailiac):
 		return math.log10(bicep + tricep + subscapular + suprailiac)
 	
+	#find body density based on log sum, gender, and age
 	def findBodyDensity(pinch_sum, user_age, male):
 		if male == True:
 			if user_age < 17:
@@ -130,7 +136,8 @@ class PinchTest_Handler(webapp2.RequestHandler):
 				return 1.1333 - (.0612 * pinch_sum)
 			else:
 				return 1.339 - (.0645 * pinch_sum)
-
+	
+	#use Siri equation to calculate body fat percentage
 	def siriEquation(density):
 		return (495/density) - 450
 
@@ -154,29 +161,36 @@ class PinchTest_Handler(webapp2.RequestHandler):
 			new_pinches.subscapular_pinch = subscapular 
 			suprailiac = float(pinch_data['suprailiac'])
 			new_pinches.suprailiac_pinch = suprailiac
+			#get log sum
 			pinch_sum = findLogSum(bicep, tricep, subscapular ,suprailiac)
 			male = curr_user.male
 			user_age = curr_user.age
+			#get density
 			density = findBodyDensity(pinch_sum, user_age, male)
 			new_pinches.body_density_measure = density
+			#get body fat
 			body_fat = siriEquation(density)
 			new_pinches.body_fat_measure = body_fat
 			new_pinches.put()
 			new_pinches.pinch_id = new_pinches.key.urlsafe()
 			new_pinches.put()
+			#append new measurements to current user
 			curr_user.pinches.append(new_pinches)
 			curr_user.put()
 			curr_user_dict = curr_user.to_dict()
 			self.response.write(json.dumps(curr_user_dict))
 
+	#return selected pinch measurement based on id
 	def get(self, pinch_id=None):
 		if pinch_id:
 			pinch = ndb.Key(urlsafe=pinch_id).get()
 			pinch_dict = pinch.to_dict()
 			self.response.write(json.dumps(pinch_dict))
 
+	#replace current pinches with edited ones with PUT verb
 	def put(self, pinch_id=None):
 		pinch_data = ast.literal_eval(self.request.body)
+		#get current user
 		if pinch_data.get('user'):
 			if pinch_id:
 				users = User.query()
@@ -211,7 +225,7 @@ class PinchTest_Handler(webapp2.RequestHandler):
 
 	
 
-#test class
+#post to create a new user
 class MainPage(webapp2.RequestHandler):
 	def post(self):
 		user_data = ast.literal_eval(self.request.body)
@@ -234,11 +248,13 @@ class MainPage(webapp2.RequestHandler):
 		self.response.write(json.dumps(new_user_dict))
 
 
-
+#user handler
 class UserHandler(webapp2.RequestHandler):
+	#put new user data into user class
 	def put(self):
 		user_data = ast.literal_eval(self.request.body)
 		user_id = user_data['user']
+		#find user
 		users = User.query()
 		for user in users:
 			if user.id == user_id:
@@ -257,6 +273,7 @@ class UserHandler(webapp2.RequestHandler):
 				new_user.measurements = user.measurements;
 				new_user.first_name = user_data['first_name']
 				new_user.last_name = user_data['last_name']
+				#replace updated fields
 				if user_data.get('email'):
 					new_user.email = user_data['email']
 				if user_data.get('age'):
@@ -267,7 +284,7 @@ class UserHandler(webapp2.RequestHandler):
 				new_user.put()
 				self.response.write(json.dumps(new_user.to_dict()))
 
-
+	#get all of specific users data including measurements and pinches
 	def get(self, user_id):
 		if user_id:
 			users = User.query()
@@ -276,17 +293,20 @@ class UserHandler(webapp2.RequestHandler):
 					curr_user = user
 					self.response.write(json.dumps(curr_user.to_dict()))
 
+	#delete user
 	def delete(self, user_id):
 		if user_id:
 			users = User.query()
 			for user in users:
 				if user.id == user_id:
 					curr_user = user
+					#delete all asssociated pinches
 					pinches = Pinches.query()
 					for pinch in pinches:
 						for curr_pinch in curr_user.pinches:
 							if curr_pinch.pinch_id == pinch.pinch_id:
 								pinch.key.delete()
+					#delete all associated measurements
 					measurements = Measurement.query()
 					for measurement in measurements:
 						for curr_measure in curr_user.measurements:
