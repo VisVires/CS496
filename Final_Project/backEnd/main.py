@@ -4,6 +4,19 @@ import ast
 import webapp2
 import json
 import math
+import os
+from google.appengine.ext.webapp import template
+from urlparse import urlparse
+import logging
+import urllib
+import urllib2
+import uuid
+from google.appengine.api import urlfetch
+
+
+CLIENT_ID =
+CLIENT_SECRET =
+REDIRECT_URI =
 
 
 #set up measurement class
